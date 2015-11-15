@@ -10,11 +10,11 @@
               tools:context=".MainActivity">
     <fragment android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:name="com.example.daisy.dailyapple.TranslationFragment"
+              android:name="com.example.daisy.dailyapple.translation.TranslationFragment"
               android:id="@+id/translationFragment"/>
     <fragment android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:name="com.example.daisy.dailyapple.ImageHintFragment"
+              android:name="imageHint.ImageHintFragment"
               android:id="@+id/imageHintFragment"/>
 
 </LinearLayout>

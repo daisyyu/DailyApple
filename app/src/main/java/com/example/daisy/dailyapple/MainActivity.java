@@ -15,10 +15,7 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import com.example.daisy.dailyapple.global.Utils;
 
-import com.example.daisy.dailyapple.translation.loaders.SearchQueryChangeListener;
-
-import java.io.IOException;
-import java.util.List;
+import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 
 public class MainActivity extends AppCompatActivity implements SearchView
         .OnQueryTextListener {

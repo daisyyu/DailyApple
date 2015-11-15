@@ -1,4 +1,4 @@
-package com.example.daisy.dailyapple.translation.loaders;
+package com.example.daisy.dailyapple.translation;
 
 /**
  * Created by Daisy on 11/2/15.

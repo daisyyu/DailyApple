@@ -1,4 +1,4 @@
-package com.example.daisy.dailyapple;
+package com.example.daisy.dailyapple.learn;
 
 
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import com.example.daisy.dailyapple.learn.LearningActivityFragment;
 
 import java.util.List;
 
@@ -39,6 +40,6 @@ public class LearningViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "OBJECT " + (position + 1);
+        return dictionary.get(position);
     }
 }

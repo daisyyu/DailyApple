@@ -1,4 +1,4 @@
-package com.example.daisy.dailyapple.translation.loaders;
+package imageHint;
 
 import java.util.Collections;
 import java.util.Iterator;

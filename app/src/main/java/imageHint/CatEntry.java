@@ -1,4 +1,4 @@
-package com.example.daisy.dailyapple.translation.loaders;
+package imageHint;
 
 /**
  * Created by Daisy on 10/5/15.

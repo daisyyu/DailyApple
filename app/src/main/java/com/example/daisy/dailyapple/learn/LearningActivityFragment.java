@@ -1,4 +1,4 @@
-package com.example.daisy.dailyapple;
+package com.example.daisy.dailyapple.learn;
 
 
 import android.annotation.TargetApi;
@@ -11,8 +11,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import com.example.daisy.dailyapple.translation.loaders.SearchQueryChangeListener;
+import com.example.daisy.dailyapple.R;
+import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 
 /**
  * A placeholder fragment containing a simple view.

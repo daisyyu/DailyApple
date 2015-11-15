@@ -1,6 +1,4 @@
-package com.example.daisy.dailyapple.translation.loaders;
-
-import android.app.ProgressDialog;
+package imageHint;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;

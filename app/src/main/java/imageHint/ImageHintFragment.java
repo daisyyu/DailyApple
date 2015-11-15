@@ -1,4 +1,4 @@
-package com.example.daisy.dailyapple;
+package imageHint;
 
 
 import android.content.Context;
@@ -16,13 +16,9 @@ import android.view.ViewGroup;
 
 import android.widget.*;
 import com.example.daisy.dailyapple.R;
-import com.example.daisy.dailyapple.translation.loaders.CatAdapter;
-import com.example.daisy.dailyapple.translation.loaders.CatEntry;
-import com.example.daisy.dailyapple.translation.loaders.CatEntryLoader;
-import com.example.daisy.dailyapple.translation.loaders.SearchQueryChangeListener;
+import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

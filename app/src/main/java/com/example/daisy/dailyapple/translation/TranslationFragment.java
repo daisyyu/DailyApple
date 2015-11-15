@@ -1,14 +1,11 @@
-package com.example.daisy.dailyapple;
+package com.example.daisy.dailyapple.translation;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.Loader;
 import android.support.v4.app.LoaderManager;
@@ -20,13 +17,10 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.TextView;
-import com.example.daisy.dailyapple.translation.ForvoJSONParserImpl;
-import com.example.daisy.dailyapple.translation.IResult;
-import com.example.daisy.dailyapple.translation.YoudaoJSONParserImpl;
+import com.example.daisy.dailyapple.R;
 import com.example.daisy.dailyapple.translation.loaders.*;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
