@@ -42,15 +42,15 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
 
     @Override
     protected void onStartLoading() {
-        Log.d("Daisy", "onStratLoading CatEntryLoader");
+        Log.d("Daisy", "onStratLoading LearnItemEntryLoader");
 //        dialog = ProgressDialog.show(context, "", "Please wait...");
         forceLoad();
     }
 
     @Override
     public List<CatEntry> loadInBackground() {
-        Log.d("Daisy", "loadInBackground CatEntryLoader");
-//        List<CatEntry> result = new ArrayList<>();
+        Log.d("Daisy", "loadInBackground LearnItemEntryLoader");
+//        List<WordsEntry> result = new ArrayList<>();
 //        result = Arrays.asList(catEntries);
         try {
             return getResultFromGoogleSearchAPI(searchStr);
@@ -79,7 +79,7 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
         JSONObject json = null;
         BufferedReader reader = null;
         try {
-            Log.v("Daisy", "CatEntryLoader search string is " + searchStr);
+            Log.v("Daisy", "LearnItemEntryLoader search string is " + searchStr);
             url = new URL("https://ajax.googleapis.com/ajax/services/search/images?" +
                     "v=1.0&q=" + strSearch + "&rsz=8");
             //&key=ABQIAAAADxhJjHRvoeM2WF3nxP5rCBRcGWwHZ9XQzXD3SWg04vbBlJ3EWxR0b0NVPhZ4xmhQVm3uUBvvRF-VAA&userip=192.168.0.172");

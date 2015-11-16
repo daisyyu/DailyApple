@@ -48,7 +48,6 @@ public class ImageHintFragment extends ListFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initLoaderCallBack();
 
     }
 

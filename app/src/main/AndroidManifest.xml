@@ -20,11 +20,14 @@
         <receiver android:name=".alarm.AlarmReceiver" />
 
         <activity
-            android:name=".LearningActivity"
+            android:name=".learn.LearningActivity"
             android:label="@string/title_activity_learning" >
+        </activity>
+        <activity
+            android:name=".learn.LearnListActivity"
+            android:label="@string/title_activity_learn_list" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
