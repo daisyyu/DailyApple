@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -43,19 +44,33 @@ public class LearnListFragment extends ListFragment {
     ListView listView;
     Map<String, WordsEntry> wordsEntryMap = null;
     String[] keyArray = null;
+    private WordsListHolder.ListName listName;
+
     public static String EXTRA_WORDS_LIST = "extra_words_list";
     public static String EXTRA_CLICK_POSITION = "extra_click_position";
-
+    private static final String ARG_PARAM1 = "param1";
 
     public LearnListFragment() {
         // Required empty public constructor
+    }
+
+    public static LearnListFragment newInstance(final WordsListHolder
+            .ListName listName) {
+        LearnListFragment fragment = new LearnListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PARAM1, listName);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("Daisy", "LearnListFragment onCreate()");
         super.onCreate(savedInstanceState);
-
+        if (getArguments() != null) {
+            listName = (WordsListHolder.ListName) getArguments().get
+                    (ARG_PARAM1);
+        }
     }
 
     @Override
@@ -124,7 +139,7 @@ public class LearnListFragment extends ListFragment {
             public Loader<Map<String, WordsEntry>> onCreateLoader(int id,
                                                                   Bundle args) {
                 Log.d("Daisy", "LearnListFragment onCreateLoader");
-                return new LearnItemEntryLoader(getActivity());
+                return new LearnItemEntryLoader(getActivity(), listName);
             }
 
             @Override

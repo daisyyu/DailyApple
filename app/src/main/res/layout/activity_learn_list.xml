@@ -13,10 +13,9 @@
             android:text="@string/hello_world"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" android:id="@+id/textView"/>
-    <fragment android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:name="com.example.daisy.dailyapple.learn.LearnListFragment"
-              android:id="@+id/fragment" android:layout_below="@+id/textView"
-              android:layout_marginTop="34dp"/>
+    <FrameLayout android:layout_width="fill_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/learnListFragmentPlaceHolder"
+                 android:layout_marginTop="34dp"/>
 
 </LinearLayout>

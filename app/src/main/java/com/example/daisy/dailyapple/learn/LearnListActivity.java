@@ -1,5 +1,7 @@
 package com.example.daisy.dailyapple.learn;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,10 +10,19 @@ import com.example.daisy.dailyapple.R;
 
 public class LearnListActivity extends AppCompatActivity {
 
+    private WordsListHolder.ListName listName;
+    FragmentManager fragmentManager;
+    Fragment learnListFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        listName = WordsListHolder.ListName.TESTING_LIST;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learn_list);
+        fragmentManager = getSupportFragmentManager();
+        learnListFragment = LearnListFragment.newInstance(listName);
+        fragmentManager.beginTransaction().add(R.id
+                .learnListFragmentPlaceHolder, learnListFragment).commit();
     }
 
     @Override

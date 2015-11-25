@@ -26,11 +26,14 @@ import java.util.Map;
 public class LearnItemEntryLoader extends AsyncTaskLoader<Map<String, WordsEntry>> {
 //    private ProgressDialog dialog;
     private Context context;
+    private WordsListHolder.ListName listName;
 
 
-    public LearnItemEntryLoader(Context context) {
+    public LearnItemEntryLoader(Context context, final WordsListHolder.ListName
+            listName) {
         super(context);
         this.context = context;
+        this.listName = listName;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class LearnItemEntryLoader extends AsyncTaskLoader<Map<String, WordsEntry
     private Map<String, WordsEntry> getWordsEntryMap(final Context context) {
         Map<String, WordsEntry> map;
         WordsListHolder listHolder = new WordsListHolder(context);
-        map = listHolder.getList(WordsListHolder.ListName.TESTING_LIST);
+        map = listHolder.getList(listName);
         return map;
     }
 
