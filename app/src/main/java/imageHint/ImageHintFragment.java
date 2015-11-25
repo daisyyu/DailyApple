@@ -37,7 +37,9 @@ public class ImageHintFragment extends ListFragment implements
     String searchTarget;
     CatAdapter adapter;
     ListView listView;
-    List<String> checkedImages = new ArrayList<>();
+
+    String checkedImage;
+
     List<CatEntry> catEntries;
     private boolean isFragmentReady = false;
 
@@ -87,13 +89,15 @@ public class ImageHintFragment extends ListFragment implements
         CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
         if (checkBox.isChecked()) {
             //remove from list
-            checkedImages.remove(catEntries.get(position).getIcon());
+//            checkedImages.remove(catEntries.get(position).getIcon());
+            checkedImage = null;
         } else {
-            checkedImages.add(catEntries.get(position).getIcon());
+//            checkedImages.add(catEntries.get(position).getIcon());
+            checkedImage = catEntries.get(position).getIcon();
         }
         checkBox.performClick();
         Log.d("Daisy", "ImageHintFragment,after onItemClick, checkedImages are" +
-                " now: " + checkedImages.toString());
+                " now: " + checkedImage);
     }
 
 
@@ -107,11 +111,9 @@ public class ImageHintFragment extends ListFragment implements
         }
         searchTarget = !TextUtils.isEmpty(queryString) ? queryString.replace(SPACE, "+") :
                 null;
-        Toast.makeText(getActivity(), "query is changed", Toast
-                .LENGTH_SHORT).show();
-        // store checked image and memory hint aync
+        Log.d("Daisy", "ImageHintFragment updateViewOnQueryChange");
         //reset values for checked images and memory hint
-        checkedImages.clear();
+        checkedImage = null;
         getLoaderManager().restartLoader(0, null, callback);
     }
 
@@ -129,6 +131,10 @@ public class ImageHintFragment extends ListFragment implements
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    public String getCheckedImage() {
+        return checkedImage;
     }
 
     private void initLoaderCallBack() {

@@ -37,6 +37,7 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
     public static final String SPACE = " ";
     private TextView textView;
     private String mp3Address = null;
+    private static final String ARG_PARAM1 = "param1";
     MediaPlayer mediaPlayer;
     private Button mp3PlayButton;
     private boolean isFragmentReady = false;
@@ -46,10 +47,20 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
         // Required empty public constructor
     }
 
+    public static TranslationFragment newInstance(final String searchTarget){
+        TranslationFragment fragment = new TranslationFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(ARG_PARAM1, searchTarget);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("Daisy", "TranslationFragment onCreate");
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            searchTarget = getArguments().getString(ARG_PARAM1);
+        }
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -96,6 +107,12 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
         });
         initLoaderCallBack();
         isFragmentReady = true;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateViewOnQueryChange(searchTarget);
     }
 
     @Override

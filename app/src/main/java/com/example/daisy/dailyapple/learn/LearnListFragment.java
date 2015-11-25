@@ -53,6 +53,7 @@ public class LearnListFragment extends ListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("Daisy", "LearnListFragment onCreate()");
         super.onCreate(savedInstanceState);
 
     }

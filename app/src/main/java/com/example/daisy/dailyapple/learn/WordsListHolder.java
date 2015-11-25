@@ -8,6 +8,7 @@ import com.example.daisy.dailyapple.R;
 
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Daisy on 11/15/15.
@@ -34,7 +35,7 @@ public class WordsListHolder {
     }
 
     private Context context;
-    static Map<String, WordsEntry> testingList;
+    public static Map<String, WordsEntry> testingList;
 
     public WordsListHolder(final Context context) {
         this.context = context;
@@ -45,7 +46,6 @@ public class WordsListHolder {
         switch (listName) {
             case TESTING_LIST:
                 map = getTestingList();
-                refreshList(map, listName);
             default:
         }
         return map;
@@ -56,11 +56,12 @@ public class WordsListHolder {
             return testingList;
         }
         Resources resources = context.getResources();
-        testingList = new Hashtable<>();
+        testingList = new ConcurrentHashMap<>();
         String[] words = resources.getStringArray(R.array.testing_list);
         for (String word : words) {
             testingList.put(word, new WordsEntry(null, null, false));
         }
+        refreshList(testingList, ListName.TESTING_LIST);
         return testingList;
     }
 

@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by Daisy on 10/6/15.
  */
 public class LearnItemEntryLoader extends AsyncTaskLoader<Map<String, WordsEntry>> {
-    private ProgressDialog dialog;
+//    private ProgressDialog dialog;
     private Context context;
 
 
@@ -36,7 +36,7 @@ public class LearnItemEntryLoader extends AsyncTaskLoader<Map<String, WordsEntry
     @Override
     protected void onStartLoading() {
         Log.d("Daisy", "onStratLoading LearnItemEntryLoader");
-        dialog = ProgressDialog.show(context, "", "Please wait...");
+//        dialog = ProgressDialog.show(context, "", "Please wait...");
         forceLoad();
     }
 
@@ -57,9 +57,14 @@ public class LearnItemEntryLoader extends AsyncTaskLoader<Map<String, WordsEntry
 
     @Override
     public void deliverResult(Map<String, WordsEntry> data) {
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
-        super.deliverResult(data);
+
+            Log.d("Daisy", "LearnItemEntryLoader deliverResult");
+//            if (dialog.isShowing()) {
+//                Log.d("Daisy", "Diglog is showing Daisy");
+//                dialog.cancel();
+//            }
+            super.deliverResult(data);
+
+
     }
 }

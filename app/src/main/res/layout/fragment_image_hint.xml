@@ -14,7 +14,7 @@
         <ListView android:id="@id/android:list"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  android:background="@android:color/holo_orange_light"/>
+                  android:background="@android:color/holo_blue_light"/>
 
         <TextView android:id="@id/android:empty"
                   android:layout_width="match_parent"
