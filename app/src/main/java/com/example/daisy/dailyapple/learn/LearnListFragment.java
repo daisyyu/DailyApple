@@ -48,6 +48,7 @@ public class LearnListFragment extends ListFragment {
 
     public static String EXTRA_WORDS_LIST = "extra_words_list";
     public static String EXTRA_CLICK_POSITION = "extra_click_position";
+    public static String EXTRA_LIST_NAME = "extra_list_name";
     private static final String ARG_PARAM1 = "param1";
 
     public LearnListFragment() {
@@ -113,6 +114,7 @@ public class LearnListFragment extends ListFragment {
         Intent intent = new Intent(getActivity(), LearningActivity.class);
         intent.putExtra(EXTRA_WORDS_LIST, keyArray);
         intent.putExtra(EXTRA_CLICK_POSITION, position);
+        intent.putExtra(EXTRA_LIST_NAME,listName);
         startActivity(intent);
     }
 

@@ -16,6 +16,7 @@ public class LearnListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //TODO: this should not be hard coded 
         listName = WordsListHolder.ListName.TESTING_LIST;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learn_list);

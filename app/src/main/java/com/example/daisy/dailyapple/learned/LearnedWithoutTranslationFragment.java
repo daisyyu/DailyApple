@@ -26,6 +26,9 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
     private TextView personalHint;
     private ImageLoader imageLoader;
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    private WordsListHolder.ListName listName;
 
     public String getQueryString() {
         return queryString;
@@ -42,10 +45,11 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
     }
 
     public static LearnedWithoutTranslationFragment newInstance(final String
-                                                                        queryString) {
+                                                                        queryString, final WordsListHolder.ListName listName) {
         LearnedWithoutTranslationFragment fragment = new LearnedWithoutTranslationFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ARG_PARAM1, queryString);
+        bundle.putSerializable(ARG_PARAM2, listName);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -55,6 +59,8 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             queryString = getArguments().getString(ARG_PARAM1);
+            listName = (WordsListHolder.ListName) getArguments()
+                    .get(ARG_PARAM2);
         }
         imageLoader = new ImageLoader(getActivity());
     }
@@ -93,7 +99,8 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
                     "null,not updating view");
             return;
         }
-        wordsEntry = WordsListHolder.testingList.get(queryString);
+        wordsEntry = new WordsListHolder(getActivity()).getList(listName).get
+                (queryString);
         personalHint.setText(wordsEntry.getPersonalHint());
         imageLoader.DisplayImage(wordsEntry.getIconHint(), imageHint);
     }

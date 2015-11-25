@@ -23,6 +23,7 @@ public class LearningActivity extends FragmentActivity {
     private static List<String> defaultList = Arrays.asList(new String[]{"cat",
             "luna", "poodle", "Daisy", "Roc"});
     private static List<String> list;
+    private WordsListHolder.ListName listName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +33,16 @@ public class LearningActivity extends FragmentActivity {
         Intent intent = getIntent();
         list = Arrays.asList(intent.getStringArrayExtra(LearnListFragment
                 .EXTRA_WORDS_LIST));
+        listName = (WordsListHolder.ListName) intent.getSerializableExtra(LearnListFragment
+                .EXTRA_LIST_NAME);
         // set view pager
         setContentView(R.layout.activity_learning);
         pagerAdapter = new LearningViewPagerAdapter(getSupportFragmentManager
-                (), list);
+                (), list,listName);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         int position = intent.getIntExtra(LearnListFragment
-                .EXTRA_CLICK_POSITION,0);
+                .EXTRA_CLICK_POSITION, 0);
         viewPager.setCurrentItem(position);
 
     }

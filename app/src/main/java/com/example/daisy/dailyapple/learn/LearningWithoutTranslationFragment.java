@@ -28,6 +28,7 @@ public class LearningWithoutTranslationFragment extends Fragment implements Sear
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     private Button gotItButton;
     private EditText personalHintEditText;
@@ -37,6 +38,7 @@ public class LearningWithoutTranslationFragment extends Fragment implements Sear
     private Fragment imageHintFragment;
     private FragmentManager fragmentManager;
     private Fragment parentFragment;
+    private WordsListHolder.ListName listName;
 
     /**
      * Use this factory method to create a new instance of
@@ -47,10 +49,11 @@ public class LearningWithoutTranslationFragment extends Fragment implements Sear
      */
     // TODO: Rename and change types and number of parameters
     public static LearningWithoutTranslationFragment newInstance(final String
-                                                                         queryString) {
+                                                                         queryString, final WordsListHolder.ListName listName) {
         LearningWithoutTranslationFragment fragment = new LearningWithoutTranslationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, queryString);
+        args.putSerializable(ARG_PARAM2, listName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,6 +67,8 @@ public class LearningWithoutTranslationFragment extends Fragment implements Sear
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             queryString = getArguments().getString(ARG_PARAM1);
+            listName = (WordsListHolder.ListName) getArguments()
+                    .get(ARG_PARAM2);
         }
         fragmentManager = getChildFragmentManager();
         parentFragment = getParentFragment();

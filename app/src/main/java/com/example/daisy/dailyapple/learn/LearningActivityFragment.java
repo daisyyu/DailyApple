@@ -18,6 +18,8 @@ import com.example.daisy.dailyapple.learned.LearnedWithoutTranslationFragment;
 import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 import com.example.daisy.dailyapple.translation.TranslationFragment;
 
+import java.util.List;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -36,8 +38,10 @@ public class LearningActivityFragment extends Fragment implements
     SharedPreferences sharedPref;
     private WordsEntry wordsEntry;
     private String searchQuery;
+    private WordsListHolder.ListName listName;
 
     static public String SEARCH_QUERY_KEY = "searchQuery";
+    static public String LISTNAME_KEY = "listName";
 
 
     public LearningActivityFragment() {
@@ -60,13 +64,14 @@ public class LearningActivityFragment extends Fragment implements
         View rooView = inflater.inflate(R.layout.fragment_learning, container, false);
         Bundle args = getArguments();
         searchQuery = args.getString(SEARCH_QUERY_KEY);
+        listName = (WordsListHolder.ListName) args.get(LISTNAME_KEY);
         wordsEntry = WordsListHolder.testingList.get(searchQuery);
         if (!wordsEntry.isLearned()) {
             bottomFragment = LearningWithoutTranslationFragment.newInstance
-                    (searchQuery);
+                    (searchQuery, listName);
         } else {
             bottomFragment = LearnedWithoutTranslationFragment.newInstance
-                    (searchQuery);
+                    (searchQuery, listName);
         }
         fragmentManager.beginTransaction().add(R.id
                         .buttomFragmentPlaceHolder,
@@ -116,7 +121,8 @@ public class LearningActivityFragment extends Fragment implements
         wordsEntry.setIconHint(imageIcon);
         wordsEntry.setPersonalHint(personalHint);
         wordsEntry.setIsLearned(true);
-        bottomFragment = LearnedWithoutTranslationFragment.newInstance(searchQuery);
+        bottomFragment = LearnedWithoutTranslationFragment.newInstance
+                (searchQuery, listName);
         fragmentManager.beginTransaction().replace(R.id
                 .buttomFragmentPlaceHolder, bottomFragment).commit();
         // SharedPref
