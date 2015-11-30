@@ -1,4 +1,4 @@
-package com.example.daisy.dailyapple.learn;
+package com.example.daisy.dailyapple.DAO;
 
 /**
  * Created by Daisy on 10/5/15.
@@ -8,6 +8,9 @@ public class WordsEntry {
     }
 
     private String iconHint;
+
+    private String word;
+
     private String personalHint;
     private boolean isLearned = false;
 
@@ -24,10 +27,12 @@ public class WordsEntry {
     }
 
 
-    public WordsEntry(String iconHint, String personalHint, boolean isLearned) {
+    public WordsEntry(String iconHint, String personalHint, boolean
+            isLearned,String word) {
         this.iconHint = iconHint;
         this.personalHint = personalHint;
         this.isLearned = isLearned;
+        this.word = word;
     }
 
     public String getPersonalHint() {
@@ -48,8 +53,11 @@ public class WordsEntry {
         return "iconHint: " + iconHint + " personalhint: " + personalHint + " " +
                 "isLearned: " + isLearned;
     }
+    public String getWord() {
+        return word;
+    }
 
-    public void seticonHint(String iconHint) {
-        this.iconHint = iconHint;
+    public void setWord(String word) {
+        this.word = word;
     }
 }

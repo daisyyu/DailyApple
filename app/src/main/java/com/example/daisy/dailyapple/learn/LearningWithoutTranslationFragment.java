@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
 import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 import imageHint.ImageHintFragment;

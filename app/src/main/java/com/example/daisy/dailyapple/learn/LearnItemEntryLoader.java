@@ -1,23 +1,11 @@
 package com.example.daisy.dailyapple.learn;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
-import com.example.daisy.dailyapple.Exceptions.NetworkExceptions;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.daisy.dailyapple.DAO.WordsEntry;
+import com.example.daisy.dailyapple.DAO.WordsListHolder;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**

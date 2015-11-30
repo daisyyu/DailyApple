@@ -1,12 +1,12 @@
-package com.example.daisy.dailyapple.learn;
+package com.example.daisy.dailyapple.DAO;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.Log;
 import com.example.daisy.dailyapple.R;
+import com.example.daisy.dailyapple.database.MySQLiteHelper;
 
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WordsListHolder {
 
     public static enum ListName {
-        TESTING_LIST("testingList");
+        TESTING_LIST("testingList", MySQLiteHelper.TableNames.TABLE_TESTING_LIST);
 
         public String getListName() {
             return listName;
@@ -28,8 +28,19 @@ public class WordsListHolder {
 
         private String listName;
 
-        ListName(String listName) {
+        public MySQLiteHelper.TableNames getTableName() {
+            return tableName;
+        }
+
+        public void setTableName(MySQLiteHelper.TableNames tableName) {
+            this.tableName = tableName;
+        }
+
+        private MySQLiteHelper.TableNames tableName;
+
+        ListName(String listName, MySQLiteHelper.TableNames tableName) {
             this.listName = listName;
+            this.tableName = tableName;
         }
 
     }
@@ -59,7 +70,7 @@ public class WordsListHolder {
         testingList = new ConcurrentHashMap<>();
         String[] words = resources.getStringArray(R.array.testing_list);
         for (String word : words) {
-            testingList.put(word, new WordsEntry(null, null, false));
+            testingList.put(word, new WordsEntry(null, null, false, word));
         }
         refreshList(testingList, ListName.TESTING_LIST);
         return testingList;
@@ -77,19 +88,9 @@ public class WordsListHolder {
         SharedPreferences sharedPref = null;
         switch (listName) {
             case TESTING_LIST:
-                sharedPref = context.getSharedPreferences(context
-                        .getString(R.string
-                                .preference_file_key_is_learned_testing_list)
-                        , Context.MODE_PRIVATE);
+                WordsDAO wordsDAO = new WordsDAO(context, listName);
+                wordsDAO.getALLWordsEntryAndUpdateConcurrentMap(map);
             default:
-        }
-        if (sharedPref == null) {
-            Log.d("Daisy", listName.getListName() + " is null");
-            return;
-        }
-        for (Map.Entry<String, WordsEntry> item : map.entrySet()) {
-            boolean isLearned = sharedPref.getBoolean(item.getKey(), false);
-            item.getValue().setIsLearned(isLearned);
         }
     }
 }

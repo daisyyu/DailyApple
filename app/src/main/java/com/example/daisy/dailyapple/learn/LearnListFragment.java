@@ -6,25 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.*;
+import com.example.daisy.dailyapple.DAO.WordsEntry;
+import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
-import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
-import imageHint.CatAdapter;
-import imageHint.CatEntry;
-import imageHint.CatEntryLoader;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -114,7 +108,7 @@ public class LearnListFragment extends ListFragment {
         Intent intent = new Intent(getActivity(), LearningActivity.class);
         intent.putExtra(EXTRA_WORDS_LIST, keyArray);
         intent.putExtra(EXTRA_CLICK_POSITION, position);
-        intent.putExtra(EXTRA_LIST_NAME,listName);
+        intent.putExtra(EXTRA_LIST_NAME, listName);
         startActivity(intent);
     }
 

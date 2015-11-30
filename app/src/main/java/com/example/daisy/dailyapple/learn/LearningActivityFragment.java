@@ -12,13 +12,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import com.example.daisy.dailyapple.DAO.WordsDAO;
+import com.example.daisy.dailyapple.DAO.WordsEntry;
+import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
 import com.example.daisy.dailyapple.learned.LearnedWithoutTranslationFragment;
 import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 import com.example.daisy.dailyapple.translation.TranslationFragment;
-
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -125,7 +125,9 @@ public class LearningActivityFragment extends Fragment implements
                 (searchQuery, listName);
         fragmentManager.beginTransaction().replace(R.id
                 .buttomFragmentPlaceHolder, bottomFragment).commit();
-        // SharedPref
-        sharedPref.edit().putBoolean(searchQuery, true).commit();
+        // TODO: make this an intent service
+        // Write to database on the ASAP to prevent data loss
+        WordsDAO wordsDAO = new WordsDAO(getActivity(), listName);
+        wordsDAO.addWordsEntry(wordsEntry);
     }
 }

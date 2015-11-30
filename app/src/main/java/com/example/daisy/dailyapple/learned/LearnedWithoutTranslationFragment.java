@@ -11,9 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.daisy.dailyapple.R;
-import com.example.daisy.dailyapple.learn.LearningWithoutTranslationFragment;
-import com.example.daisy.dailyapple.learn.WordsEntry;
-import com.example.daisy.dailyapple.learn.WordsListHolder;
+import com.example.daisy.dailyapple.DAO.WordsEntry;
+import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 import imageHint.ImageLoader;
 
