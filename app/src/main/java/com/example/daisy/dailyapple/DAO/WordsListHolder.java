@@ -16,7 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WordsListHolder {
 
     public static enum ListName {
-        TESTING_LIST("testingList", MySQLiteHelper.TableNames.TABLE_TESTING_LIST);
+        TESTING_LIST("testingList", MySQLiteHelper.TableNames
+                .TABLE_TESTING_LIST),
+        DAILY_LIST("daisy100", MySQLiteHelper.TableNames.TABLE_DAILY_100),
+        GRE_LIST("GREList", MySQLiteHelper.TableNames.TABLE_GRE_LIST),
+        // Custom list must be the last one
+        CUSTOM_LIST("CustomList", MySQLiteHelper.TableNames.TABLE_CUSTOME);
 
         public String getListName() {
             return listName;

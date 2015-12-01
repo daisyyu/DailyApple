@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class MySQLiteHelper extends SQLiteOpenHelper {
     public static enum TableNames {
-        TABLE_TESTING_LIST,
+        TABLE_TESTING_LIST,TABLE_GRE_LIST,TABLE_DAILY_100,TABLE_CUSTOME;
     }
 
     public static final String TABLE_TESTING_LIST = "testingList";

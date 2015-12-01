@@ -16,16 +16,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.daisy.dailyapple.R;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity implements
+        ExpandableListView.OnChildClickListener, ExpandableListView.OnGroupClickListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
+    private NavigationDrawerDataPump navigationDrawerPump;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,8 @@ public class WelcomeActivity extends AppCompatActivity {
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
+        navigationDrawerPump = mNavigationDrawerFragment
+                .navigationDrawerDataPump;
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
@@ -59,4 +64,29 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        Toast.makeText(WelcomeActivity.this, "groupPosition: " + groupPosition
+                + " childPosition: " + childPosition
+                , Toast
+                .LENGTH_SHORT)
+                .show();
+        mNavigationDrawerFragment.closeDrawer();
+        return false;
+    }
+
+    @Override
+    public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+        Toast.makeText(WelcomeActivity.this, "groupPosition: " + groupPosition
+                , Toast
+                .LENGTH_SHORT)
+                .show();
+        if (!navigationDrawerPump.getListDataHeader().get(groupPosition)
+                .isExpandable) {
+            mNavigationDrawerFragment.closeDrawer();
+            return true;
+        } else {
+        }
+        return false;
+    }
 }
