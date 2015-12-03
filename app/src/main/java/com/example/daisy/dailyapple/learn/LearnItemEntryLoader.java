@@ -12,14 +12,16 @@ import java.util.Map;
  * Created by Daisy on 10/6/15.
  */
 public class LearnItemEntryLoader extends AsyncTaskLoader<Map<String, WordsEntry>> {
-//    private ProgressDialog dialog;
+    //    private ProgressDialog dialog;
     private Context context;
     private WordsListHolder.ListName listName;
+    private boolean isReview;
 
 
     public LearnItemEntryLoader(Context context, final WordsListHolder.ListName
-            listName) {
+            listName, final boolean isReview) {
         super(context);
+        this.isReview = isReview;
         this.context = context;
         this.listName = listName;
     }
@@ -42,19 +44,19 @@ public class LearnItemEntryLoader extends AsyncTaskLoader<Map<String, WordsEntry
     private Map<String, WordsEntry> getWordsEntryMap(final Context context) {
         Map<String, WordsEntry> map;
         WordsListHolder listHolder = new WordsListHolder(context);
-        map = listHolder.getList(listName);
+        map = listHolder.getList(listName,isReview);
         return map;
     }
 
     @Override
     public void deliverResult(Map<String, WordsEntry> data) {
 
-            Log.d("Daisy", "LearnItemEntryLoader deliverResult");
+        Log.d("Daisy", "LearnItemEntryLoader deliverResult");
 //            if (dialog.isShowing()) {
 //                Log.d("Daisy", "Diglog is showing Daisy");
 //                dialog.cancel();
 //            }
-            super.deliverResult(data);
+        super.deliverResult(data);
 
 
     }

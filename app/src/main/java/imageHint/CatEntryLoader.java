@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 import com.example.daisy.dailyapple.Exceptions.NetworkExceptions;
+import com.example.daisy.dailyapple.translation.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +23,7 @@ import java.util.List;
  * Created by Daisy on 10/6/15.
  */
 public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
-//    private ProgressDialog dialog;
+    //    private ProgressDialog dialog;
     private Context context;
     private String searchStr = "";
 
@@ -53,10 +54,17 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
 //        List<WordsEntry> result = new ArrayList<>();
 //        result = Arrays.asList(catEntries);
         try {
-            return getResultFromGoogleSearchAPI(searchStr);
-        } catch (NetworkExceptions networkExceptions) {
-            Log.d("Daisy", "Network exception catched with error " +
-                    "" + networkExceptions);
+//            return getResultFromGoogleSearchAPI(searchStr);
+            return getResultFromMicrosoftAzureAPI(searchStr);
+        } catch (HTTPClientException e) {
+            // TODO, wrap HTTPClientWITHGeneral exception and rethrow,
+            // JSONPaser and HTTPClient is too fine grind.
+            Log.d("Daisy", "HTTPClientException catched with error " +
+                    "" + e);
+            return null;
+        } catch (JSONParserException e) {
+            Log.d("Daisy", "JSONParserException catched with error " +
+                    "" + e);
             return null;
         }
     }
@@ -72,6 +80,22 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
     public CatEntryLoader(Context context) {
         super(context);
         this.context = context;
+    }
+
+    private List<CatEntry> getResultFromMicrosoftAzureAPI(final String
+                                                                  strSearch)
+            throws HTTPClientException, JSONParserException {
+        ImageSearchHTTPClient.Builder imageSearchClientBuilder = new
+                ImageSearchHTTPClient.Builder();
+        IHTTPClient imageSearchClient = imageSearchClientBuilder.setWords
+                (strSearch).build();
+        JSONObject imageSearchClientResponseJSON = imageSearchClient
+                .getJSONResponse();
+        IJSONParser azureJSONParser = new AzureJSONParserImpl();
+        AzureJSONParserImpl.Result result = (AzureJSONParserImpl
+                .Result) azureJSONParser.extractResult
+                (imageSearchClientResponseJSON);
+        return result.getCatEntryList();
     }
 
     private List<CatEntry> getResultFromGoogleSearchAPI(final String strSearch) throws NetworkExceptions {
@@ -116,9 +140,9 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
             // TODO: Check for response status;
             JSONObject responseObject = json.getJSONObject("responseData");
             JSONArray resultArray = responseObject.getJSONArray("results");
-//            Log.d("DYDEBUG", "Result array length => " + resultArray.length());
-//            Log.d("DYDEBUG", "Google image search API call result: " +
-//                    "" + resultArray.toString());
+            Log.d("DYDEBUG", "Result array length => " + resultArray.length());
+            Log.d("DYDEBUG", "Google image search API call result: " +
+                    "" + resultArray.toString());
             List<CatEntry> resultList = getImageList(resultArray);
             return resultList;
         } catch (JSONException e) {

@@ -98,8 +98,9 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
                     "null,not updating view");
             return;
         }
-        wordsEntry = new WordsListHolder(getActivity()).getList(listName).get
-                (queryString);
+        wordsEntry = new WordsListHolder(getActivity()).getList(listName, false)
+                .get
+                        (queryString);
         personalHint.setText(wordsEntry.getPersonalHint());
         imageLoader.DisplayImage(wordsEntry.getIconHint(), imageHint);
     }

@@ -28,6 +28,14 @@ public abstract class AbstractHTTPClient implements IHTTPClient {
             HttpURLConnection con = (HttpURLConnection) urlRequest.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", USER_AGENT);
+//            conn.setRequestProperty("Accept", "application/json");
+            // if this is an instance of ImageSearch Client from Azure, we
+            // need credentials set in HEADER
+            if (this instanceof ImageSearchHTTPClient) {
+                String accountKeyEnc = ((ImageSearchHTTPClient) this)
+                        .getAccountKey();
+                con.setRequestProperty("Authorization", "Basic " + accountKeyEnc);
+            }
             int responseCode = con.getResponseCode();
             if (responseCode != SUCCESS_CODE) {
                 throw new HTTPClientException("HTTP call failed with response " +

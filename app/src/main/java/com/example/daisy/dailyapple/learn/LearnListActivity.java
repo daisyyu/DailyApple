@@ -9,47 +9,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
+import com.example.daisy.dailyapple.welcome.NavigationDrawerFragment;
 
 public class LearnListActivity extends AppCompatActivity {
 
     private WordsListHolder.ListName listName;
+    private boolean isReview;
     FragmentManager fragmentManager;
     Fragment learnListFragment;
     public static final String LIST_NAME_EXTRA = "listNameExtra";
+    public static final String IS_REVIEW_BOOLEAN_EXTRA = "isReviewBoolean";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
         listName = (WordsListHolder.ListName) intent.getSerializableExtra
                 (LIST_NAME_EXTRA);
-//        listName = WordsListHolder.ListName.TESTING_LIST;
+        isReview = intent.getBooleanExtra(IS_REVIEW_BOOLEAN_EXTRA, false);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learn_list);
+        NavigationDrawerFragment.injectNavigationDrawer(this);
         fragmentManager = getSupportFragmentManager();
-        learnListFragment = LearnListFragment.newInstance(listName);
+        learnListFragment = LearnListFragment.newInstance(listName, isReview);
         fragmentManager.beginTransaction().add(R.id
                 .learnListFragmentPlaceHolder, learnListFragment).commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_learn_list, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.daisy.dailyapple.welcome;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +37,8 @@ import java.util.List;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends Fragment implements
+        ExpandableListView.OnChildClickListener, ExpandableListView.OnGroupClickListener {
 
     /**
      * Remember the position of the selected item.
@@ -66,8 +69,6 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private String currentTitle;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
     public NavigationDrawerDataPump navigationDrawerDataPump;
 
     public NavigationDrawerFragment() {
@@ -147,9 +148,8 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         mDrawerListView = (ExpandableListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
-        mDrawerListView.setOnChildClickListener((WelcomeActivity) getActivity());
-        prepareListData();
-        mDrawerListView.setOnGroupClickListener((WelcomeActivity) getActivity());
+        mDrawerListView.setOnChildClickListener(this);
+        mDrawerListView.setOnGroupClickListener(this);
         mDrawerListView.setAdapter(new ExpandableListAdapter(getActivity(),
                 navigationDrawerDataPump.getListDataHeader(),
                 navigationDrawerDataPump.getListChildData()));
@@ -262,23 +262,6 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-//        mDrawerToggle.syncState();
-        super.onStart();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallbacks = null;
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
@@ -340,43 +323,70 @@ public class NavigationDrawerFragment extends Fragment {
         void onNavigationDrawerItemSelected(int position);
     }
 
-    private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String,
-                List<String>>();
 
-        // Adding child data
-        listDataHeader.add("Top 250");
-        listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");
+    @Override
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        closeDrawer();
+        NavigationDrawerDataPump.GroupItem groupItem =
+                navigationDrawerDataPump.getListDataHeader().get(groupPosition);
+        NavigationDrawerDataPump.ChildItem childItem = navigationDrawerDataPump
+                .getListChildData().get(groupItem.parentTitle).get(childPosition);
+        Intent intent;
+        switch (groupItem.parentTitle) {
 
-        // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
+            case HOME:
+                break;
+            case LEARNING:
+                intent = new Intent(getActivity(), LearnListActivity.class);
+                intent.putExtra(LearnListActivity.IS_REVIEW_BOOLEAN_EXTRA,
+                        false);
+                intent.putExtra(LearnListActivity.LIST_NAME_EXTRA,
+                        childItem.listName);
+                startActivity(intent);
+                break;
+            case REVIEW:
+                intent = new Intent(getActivity(), LearnListActivity.class);
+                intent.putExtra(LearnListActivity.IS_REVIEW_BOOLEAN_EXTRA,
+                        true);
+                intent.putExtra(LearnListActivity.LIST_NAME_EXTRA,
+                        childItem.listName);
+                startActivity(intent);
+                break;
+            case TEST:
+                break;
+            case SETTING:
+                break;
+        }
+        return false;
+    }
 
-        List<String> nowShowing = new ArrayList<String>();
-        nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
+    @Override
+    public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+        NavigationDrawerDataPump.GroupItem groupItem =
+                navigationDrawerDataPump.getListDataHeader().get(groupPosition);
+        if (!groupItem.isExpandable) {
+            closeDrawer();
+            if (groupItem.parentTitle == NavigationDrawerDataPump.ParentTitle.HOME) {
+                Intent intent = new Intent(getActivity(), WelcomeActivity.class);
+                startActivity(intent);
+            }
+            // TODO: launch settings activity
+            return true;
+        }
+        return false;
+    }
 
-        List<String> comingSoon = new ArrayList<String>();
-        comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
+    public static void injectNavigationDrawer(Activity activity) {
+        FragmentManager fragmentManager = ((AppCompatActivity) activity)
+                .getSupportFragmentManager();
+        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+                fragmentManager.findFragmentById(R.id
+                        .navigation_drawer);
 
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) activity.findViewById(R.id
+                        .drawer_layout));
     }
 }

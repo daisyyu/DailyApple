@@ -36,6 +36,7 @@ public class LearnListFragment extends ListFragment {
     LoaderManager.LoaderCallbacks<Map<String, WordsEntry>> callback;
     LearnListItemAdapter adapter;
     ListView listView;
+    boolean isReview;
     Map<String, WordsEntry> wordsEntryMap = null;
     String[] keyArray = null;
     private WordsListHolder.ListName listName;
@@ -44,16 +45,18 @@ public class LearnListFragment extends ListFragment {
     public static String EXTRA_CLICK_POSITION = "extra_click_position";
     public static String EXTRA_LIST_NAME = "extra_list_name";
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     public LearnListFragment() {
         // Required empty public constructor
     }
 
     public static LearnListFragment newInstance(final WordsListHolder
-            .ListName listName) {
+            .ListName listName, final boolean isReview) {
         LearnListFragment fragment = new LearnListFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, listName);
+        args.putBoolean(ARG_PARAM2, isReview);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,6 +68,7 @@ public class LearnListFragment extends ListFragment {
         if (getArguments() != null) {
             listName = (WordsListHolder.ListName) getArguments().get
                     (ARG_PARAM1);
+            isReview = (boolean) getArguments().get(ARG_PARAM2);
         }
     }
 
@@ -135,12 +139,17 @@ public class LearnListFragment extends ListFragment {
             public Loader<Map<String, WordsEntry>> onCreateLoader(int id,
                                                                   Bundle args) {
                 Log.d("Daisy", "LearnListFragment onCreateLoader");
-                return new LearnItemEntryLoader(getActivity(), listName);
+                return new LearnItemEntryLoader(getActivity(), listName, isReview);
             }
 
             @Override
             public void onLoadFinished(Loader<Map<String, WordsEntry>> loader, Map<String, WordsEntry> data) {
                 Log.d("Daisy", "onLoadFinished LearnListFragment");
+                if (data == null) {
+                    Log.d("Daisy", "LearnListFragment onLoadFinished received " +
+                            "null as map");
+                    return;
+                }
                 wordsEntryMap = data;
                 for (Map.Entry<String, WordsEntry> entry : data.entrySet()
                         ) {

@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.example.daisy.dailyapple.database.MySQLiteHelper;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Daisy on 11/24/15.
@@ -28,8 +30,10 @@ public class WordsDAO {
         tableNames = listName.getTableName();
         dbHelper = new MySQLiteHelper(context);
     }
+
     /**
      * Writing a words entry to db
+     *
      * @param wordsEntry
      */
     public void addWordsEntry(WordsEntry wordsEntry) {
@@ -71,6 +75,24 @@ public class WordsDAO {
 
             } while (cursor.moveToNext());
         }
+    }
+
+    public Map<String, WordsEntry> getAllWordsEntryForReviewActionAndReturnMap() {
+        String selectQuery = "SELECT  * FROM " + tableNames.name();
+        openForRead();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        Map<String, WordsEntry> map = new HashMap<>();
+        if (cursor.moveToFirst()) {
+            do {
+                String word = cursor.getString(0);
+                String imageHint = cursor.getString(2);
+                String personalHint = cursor.getString(1);
+                WordsEntry wordsEntry = new WordsEntry(imageHint,
+                        personalHint, true, word);
+                map.put(word, wordsEntry);
+            } while (cursor.moveToNext());
+        }
+        return map;
     }
 
     private void openForRead() throws SQLException {
