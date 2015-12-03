@@ -25,6 +25,7 @@ public class LearningActivity extends FragmentActivity {
             "luna", "poodle", "Daisy", "Roc"});
     private static List<String> list;
     private WordsListHolder.ListName listName;
+    private boolean isReview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +37,11 @@ public class LearningActivity extends FragmentActivity {
                 .EXTRA_WORDS_LIST));
         listName = (WordsListHolder.ListName) intent.getSerializableExtra(LearnListFragment
                 .EXTRA_LIST_NAME);
+        isReview = intent.getBooleanExtra(LearnListFragment.EXTRA_LIST_IS_REVIEW, false);
         // set view pager
         setContentView(R.layout.activity_learning);
         pagerAdapter = new LearningViewPagerAdapter(getSupportFragmentManager
-                (), list,listName);
+                (), list, listName,isReview);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         int position = intent.getIntExtra(LearnListFragment

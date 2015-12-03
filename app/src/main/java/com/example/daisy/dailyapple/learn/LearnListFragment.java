@@ -43,6 +43,7 @@ public class LearnListFragment extends ListFragment {
 
     public static String EXTRA_WORDS_LIST = "extra_words_list";
     public static String EXTRA_CLICK_POSITION = "extra_click_position";
+    public static String EXTRA_LIST_IS_REVIEW = "extraListIsReview";
     public static String EXTRA_LIST_NAME = "extra_list_name";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -89,7 +90,7 @@ public class LearnListFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         listView = getListView();
 //      specify what layout each row has
-        adapter = new LearnListItemAdapter(getActivity(), R.layout.learn_listview_item_row);
+        adapter = new LearnListItemAdapter(getActivity(), R.layout.learn_listview_item_row,isReview);
         setListAdapter(adapter);
         initLoaderCallBack();
     }
@@ -113,6 +114,7 @@ public class LearnListFragment extends ListFragment {
         intent.putExtra(EXTRA_WORDS_LIST, keyArray);
         intent.putExtra(EXTRA_CLICK_POSITION, position);
         intent.putExtra(EXTRA_LIST_NAME, listName);
+        intent.putExtra(EXTRA_LIST_IS_REVIEW,isReview);
         startActivity(intent);
     }
 

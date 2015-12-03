@@ -2,6 +2,7 @@ package com.example.daisy.dailyapple.learn;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +23,13 @@ public class LearnListItemAdapter extends ArrayAdapter<String> {
     int layoutResourceId;
     Map<String, WordsEntry> data = null;
     String[] keyArray;
+    boolean isReview;
 
-    public LearnListItemAdapter(Context context, int layoutResourceId) {
+    public LearnListItemAdapter(Context context, int layoutResourceId, final boolean isReview) {
         super(context, layoutResourceId);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
+        this.isReview = isReview;
     }
 
     public void setData(Map<String, WordsEntry> wordsEntries, String[]
@@ -61,7 +64,20 @@ public class LearnListItemAdapter extends ArrayAdapter<String> {
         }
         WordsEntry entry = data.get(keyArray[position]);
         holder.wordsTextView.setText(keyArray[position]);
-        holder.isLearnedTextView.setText(entry.isLearned() + "");
+        String wordsTextDisplayableText;
+        if (isReview) {
+            wordsTextDisplayableText = "Review it!";
+            row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
+        } else {
+            if (entry.isLearned()) {
+                wordsTextDisplayableText = "You already leanred it";
+                row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
+            } else {
+                wordsTextDisplayableText = "Lean it now";
+                row.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+            }
+        }
+        holder.isLearnedTextView.setText(wordsTextDisplayableText);
         return row;
     }
 

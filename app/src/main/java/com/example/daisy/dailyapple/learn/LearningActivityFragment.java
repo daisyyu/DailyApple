@@ -39,9 +39,12 @@ public class LearningActivityFragment extends Fragment implements
     private WordsEntry wordsEntry;
     private String searchQuery;
     private WordsListHolder.ListName listName;
+    private WordsListHolder wordsListHolder;
+    private boolean isReview;
 
     static public String SEARCH_QUERY_KEY = "searchQuery";
     static public String LISTNAME_KEY = "listName";
+    static public String IS_REVIEW_KEY = "isReview";
 
 
     public LearningActivityFragment() {
@@ -65,8 +68,10 @@ public class LearningActivityFragment extends Fragment implements
         Bundle args = getArguments();
         searchQuery = args.getString(SEARCH_QUERY_KEY);
         listName = (WordsListHolder.ListName) args.get(LISTNAME_KEY);
-        wordsEntry = WordsListHolder.testingList.get(searchQuery);
-        if (!wordsEntry.isLearned()) {
+        isReview = args.getBoolean(IS_REVIEW_KEY);
+        wordsListHolder = new WordsListHolder(getActivity());
+        wordsEntry = wordsListHolder.getList(listName, isReview).get(searchQuery);
+        if (!isReview && !wordsEntry.isLearned()) {
             bottomFragment = LearningWithoutTranslationFragment.newInstance
                     (searchQuery, listName);
         } else {

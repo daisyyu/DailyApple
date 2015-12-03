@@ -16,12 +16,14 @@ import java.util.List;
 public class LearningViewPagerAdapter extends FragmentStatePagerAdapter {
     private List<String> dictionary;
     private WordsListHolder.ListName listName;
+    private boolean isReview;
 
     public LearningViewPagerAdapter(FragmentManager fm, List<String>
-            dictionary, WordsListHolder.ListName listName) {
+            dictionary, WordsListHolder.ListName listName, final boolean isReview) {
         super(fm);
         this.dictionary = dictionary;
         this.listName = listName;
+        this.isReview = isReview;
     }
 
     @Override
@@ -31,6 +33,7 @@ public class LearningViewPagerAdapter extends FragmentStatePagerAdapter {
         args.putString(LearningActivityFragment.SEARCH_QUERY_KEY, dictionary
                 .get(position));
         args.putSerializable(LearningActivityFragment.LISTNAME_KEY, listName);
+        args.putBoolean(LearningActivityFragment.IS_REVIEW_KEY,isReview);
         Log.d("Daisy", "LearningViewPagerAdapter getItem postition:" + position);
         fragment.setArguments(args);
         return fragment;

@@ -27,7 +27,7 @@ public class CatAdapter extends ArrayAdapter<CatEntry> implements ImageBackupHol
     public ImageLoader imageLoader;
     boolean initialized = false;
     private List<View> rowMap;
-    public static final int NUM_ROW = 8;
+    public static final int NUM_ROW = 4;
     public static Queue<CatEntry> backUpQueue;
 
     public CatAdapter(Context context, int layoutResourceId) {
@@ -63,7 +63,7 @@ public class CatAdapter extends ArrayAdapter<CatEntry> implements ImageBackupHol
                 if (entry.getIcon() != null) {
                     Log.d("Daisy", "getView called with url " + entry.getIcon());
                     imageLoader.DisplayImage(entry.getIcon(), imageView,
-                            position);
+                            i);
                 }
                 checkBox.setChecked(false);
                 rowMap.add(row);

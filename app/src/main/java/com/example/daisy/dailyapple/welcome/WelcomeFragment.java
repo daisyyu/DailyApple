@@ -1,12 +1,15 @@
 package com.example.daisy.dailyapple.welcome;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import com.example.daisy.dailyapple.R;
 
 /**
@@ -60,8 +63,9 @@ public class WelcomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_welcoming, container, false);
+        View root = inflater.inflate(R.layout.fragment_welcoming, container, false);
+        ImageView imageView = (ImageView) root.findViewById(R.id.imageView);
+        imageView.setImageResource(R.drawable.apple);
+        return root;
     }
-
-
 }

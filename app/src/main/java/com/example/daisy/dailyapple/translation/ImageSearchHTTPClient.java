@@ -9,7 +9,7 @@ public class ImageSearchHTTPClient extends AbstractHTTPClient {
     private static String SERVER_NAME = "https://api.datamarket.azure" +
             ".com/Bing/Search/Image";
     private static String QUERY_PREFIX =
-            "?$format=json&ImageFilters=%27Size%3aMedium%27&$top=16&";
+            "?$format=json&ImageFilters=%27Size%3aMedium%27&$top=8&";
     //    "";
     private static final String USER_AGENT = "Mozilla/5.0";
     private String word = "";

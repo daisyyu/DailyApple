@@ -9,9 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,6 +29,7 @@ public class ImageLoader {
     ExecutorService executorService;
     Handler handler = new Handler();//handler to display images in UI thread
     ImageBackupHolder backupHolder;
+    List<String> hashcodeList = new ArrayList<>();
 
     public ImageLoader(Context context, ImageBackupHolder backupHolder) {
         fileCache = new FileCache(context);
@@ -184,8 +183,8 @@ public class ImageLoader {
                         Log.d("Daisy", "backUpQueue is already empty");
                         return;
                     }
-                    Log.d("Daisy","exsting bitmap is null,loading from " +
-                            "backup:"+newUrl);
+                    Log.d("Daisy", "exsting bitmap is null,loading from " +
+                            "backup:" + newUrl);
                     backupHolder.getCatEntryList().get(photoToLoad.position)
                             .setIcon(newUrl);
                     bmp = getBitmap(newUrl);
@@ -194,6 +193,8 @@ public class ImageLoader {
                 if (imageViewReused(photoToLoad))
                     return;
                 BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
+                Log.d("Daisy", "BitmapDisplayer posted" + System.identityHashCode(bd));
+                hashcodeList.add(photoToLoad.url);
                 handler.post(bd);
             } catch (Throwable th) {
                 th.printStackTrace();
@@ -219,11 +220,14 @@ public class ImageLoader {
         }
 
         public void run() {
-            if (imageViewReused(photoToLoad))
-                return;
-            if (bitmap != null)
+//            if (imageViewReused(photoToLoad))
+//                return;
+            if (bitmap != null) {
+//                Log.d("Daisy", "BitmapDisplayer run" + System.identityHashCode(this));
+                hashcodeList.remove(photoToLoad.url);
+//                Log.d("Daisy", "BitmapDisplayer contains" + hashcodeList.toString());
                 photoToLoad.imageView.setImageBitmap(bitmap);
-            else
+            } else
                 photoToLoad.imageView.setImageResource(stub_id);
         }
     }
