@@ -23,11 +23,11 @@ public class WordsDAO {
             MySQLiteHelper.COLUMN_IS_LEARNED, MySQLiteHelper
             .COLUMN_IMAGE_HINT, MySQLiteHelper.COLUMN_PERSONAL_HINT};
     private Context context;
-    private MySQLiteHelper.TableNames tableNames;
+    private WordsListHolder.ListName listName;
 
     public WordsDAO(final Context context, final WordsListHolder.ListName listName) {
         this.context = context;
-        tableNames = listName.getTableName();
+        this.listName = listName;
         dbHelper = new MySQLiteHelper(context);
     }
 
@@ -46,7 +46,7 @@ public class WordsDAO {
         contentValues.put(MySQLiteHelper.COLUMN_PERSONAL_HINT, wordsEntry.getPersonalHint());
         contentValues.put(MySQLiteHelper.COLUMN_MP3, wordsEntry.getPhoneticMP3Address());
         contentValues.put(MySQLiteHelper.COLUMN_TRANSLATION, wordsEntry.getTranslation());
-        database.insert(tableNames.name(), null, contentValues);
+        database.insert(listName.name(), null, contentValues);
     }
 
     public void getWordsEntry(String word) {
@@ -55,7 +55,7 @@ public class WordsDAO {
     }
 
     public void getALLWordsEntryAndUpdateConcurrentMap(Map<String, WordsEntry> map) {
-        String selectQuery = "SELECT  * FROM " + tableNames.name();
+        String selectQuery = "SELECT  * FROM " + listName.name();
         openForRead();
         Cursor cursor = database.rawQuery(selectQuery, null);
 
@@ -85,7 +85,7 @@ public class WordsDAO {
     }
 
     public Map<String, WordsEntry> getAllWordsEntryForReviewActionAndReturnMap() {
-        String selectQuery = "SELECT  * FROM " + tableNames.name();
+        String selectQuery = "SELECT  * FROM " + listName.name();
         openForRead();
         Cursor cursor = database.rawQuery(selectQuery, null);
         Map<String, WordsEntry> map = new HashMap<>();

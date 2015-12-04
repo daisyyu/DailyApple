@@ -4,14 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import com.example.daisy.dailyapple.DAO.WordsListHolder;
 
 /**
  * Created by Daisy on 11/24/15.
  */
 public class MySQLiteHelper extends SQLiteOpenHelper {
-    public static enum TableNames {
-        TABLE_TESTING_LIST, TABLE_GRE_LIST, TABLE_DAILY_100, TABLE_CUSTOM;
-    }
 
     public static final String COLUMN_IS_LEARNED = "isLearned";
     public static final String COLUMN_PERSONAL_HINT = "personalHint";
@@ -37,8 +35,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        for (TableNames tableName : TableNames.values()) {
-            db.execSQL(String.format(DATABASE_CREATE, tableName.name()));
+        for (WordsListHolder.ListName listName : WordsListHolder.ListName.values()) {
+            db.execSQL(String.format(DATABASE_CREATE, listName.name()));
         }
 
     }
@@ -48,8 +46,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Log.d(MySQLiteHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        for (TableNames tableName : TableNames.values()) {
-            db.execSQL(String.format(DATABASE_DROP, tableName.name()));
+        for (WordsListHolder.ListName listName : WordsListHolder.ListName.values()) {
+            db.execSQL(String.format(DATABASE_DROP, listName.name()));
         }
         onCreate(db);
     }
