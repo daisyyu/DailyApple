@@ -8,11 +8,38 @@ public class WordsEntry {
     }
 
     private String iconHint;
-
     private String word;
-
     private String personalHint;
     private boolean isLearned = false;
+    private String phoneticMP3Address;
+    private String translation;
+
+    public WordsEntry(String iconHint, String personalHint, boolean
+            isLearned, String word, String phoneticMP3Address, String translation) {
+        this.iconHint = iconHint;
+        this.personalHint = personalHint;
+        this.isLearned = isLearned;
+        this.word = word;
+        this.phoneticMP3Address = phoneticMP3Address;
+        this.translation = translation;
+    }
+
+
+    public String getPhoneticMP3Address() {
+        return phoneticMP3Address;
+    }
+
+    public void setPhoneticMP3Address(String phoneticMP3Address) {
+        this.phoneticMP3Address = phoneticMP3Address;
+    }
+
+    public String getTranslation() {
+        return translation;
+    }
+
+    public void setTranslation(String translation) {
+        this.translation = translation;
+    }
 
     public boolean isLearned() {
         return isLearned;
@@ -22,17 +49,9 @@ public class WordsEntry {
         this.isLearned = isLearned;
     }
 
+
     public void setIconHint(String iconHint) {
         this.iconHint = iconHint;
-    }
-
-
-    public WordsEntry(String iconHint, String personalHint, boolean
-            isLearned,String word) {
-        this.iconHint = iconHint;
-        this.personalHint = personalHint;
-        this.isLearned = isLearned;
-        this.word = word;
     }
 
     public String getPersonalHint() {
@@ -51,8 +70,9 @@ public class WordsEntry {
     @Override
     public String toString() {
         return "iconHint: " + iconHint + " personalhint: " + personalHint + " " +
-                "isLearned: " + isLearned;
+                "isLearned: " + isLearned + " phonetic: " + phoneticMP3Address + " translation: " + translation;
     }
+
     public String getWord() {
         return word;
     }

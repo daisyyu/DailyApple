@@ -44,6 +44,8 @@ public class WordsDAO {
         int isLeanred = wordsEntry.isLearned() ? 1 : 0;
         contentValues.put(MySQLiteHelper.COLUMN_IS_LEARNED, isLeanred);
         contentValues.put(MySQLiteHelper.COLUMN_PERSONAL_HINT, wordsEntry.getPersonalHint());
+        contentValues.put(MySQLiteHelper.COLUMN_MP3, wordsEntry.getPhoneticMP3Address());
+        contentValues.put(MySQLiteHelper.COLUMN_TRANSLATION, wordsEntry.getTranslation());
         database.insert(tableNames.name(), null, contentValues);
     }
 
@@ -69,9 +71,13 @@ public class WordsDAO {
                 }
                 String imageHint = cursor.getString(2);
                 String personalHint = cursor.getString(1);
+                String mp3 = cursor.getString(4);
+                String translation = cursor.getString(5);
                 wordsEntry.setIconHint(imageHint);
                 wordsEntry.setPersonalHint(personalHint);
                 wordsEntry.setIsLearned(true);
+                wordsEntry.setPhoneticMP3Address(mp3);
+                wordsEntry.setTranslation(translation);
 
             } while (cursor.moveToNext());
         }
@@ -87,8 +93,10 @@ public class WordsDAO {
                 String word = cursor.getString(0);
                 String imageHint = cursor.getString(2);
                 String personalHint = cursor.getString(1);
+                String mp3 = cursor.getString(4);
+                String translation = cursor.getString(5);
                 WordsEntry wordsEntry = new WordsEntry(imageHint,
-                        personalHint, true, word);
+                        personalHint, true, word, mp3, translation);
                 map.put(word, wordsEntry);
             } while (cursor.moveToNext());
         }

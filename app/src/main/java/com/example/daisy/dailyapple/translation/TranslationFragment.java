@@ -36,30 +36,39 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
     public LoaderManager.LoaderCallbacks<IResult> phoneticCallback;
     public static final String SPACE = " ";
     private TextView textView;
-    private String mp3Address = null;
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
     MediaPlayer mediaPlayer;
     private Button mp3PlayButton;
     private boolean isFragmentReady = false;
-    private static String PRONOUNCE ="pronounce";
+    private static String PRONOUNCE = "pronounce";
+
+    private String translationBundle;
+    private String mp3Address = null;
 
     public TranslationFragment() {
         // Required empty public constructor
     }
 
-    public static TranslationFragment newInstance(final String searchTarget){
+    public static TranslationFragment newInstance(final String searchTarget, final String mp3, final String translation) {
         TranslationFragment fragment = new TranslationFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ARG_PARAM1, searchTarget);
+        bundle.putString(ARG_PARAM2, mp3);
+        bundle.putString(ARG_PARAM3, translation);
         fragment.setArguments(bundle);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("Daisy", "TranslationFragment onCreate");
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             searchTarget = getArguments().getString(ARG_PARAM1);
+            mp3Address = getArguments().getString(ARG_PARAM2);
+            translationBundle = getArguments().getString(ARG_PARAM3);
         }
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -105,20 +114,27 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
                 }
             }
         });
-        initLoaderCallBack();
+        if (TextUtils.isEmpty(translationBundle) || TextUtils.isEmpty(mp3Address)) {
+            initLoaderCallBack();
+        }
         isFragmentReady = true;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        updateViewOnQueryChange(searchTarget);
+        if (!TextUtils.isEmpty(translationBundle) && !TextUtils.isEmpty(mp3Address)) {
+            setPhonetic();
+            setTranslation();
+        } else {
+            updateViewOnQueryChange(searchTarget);
+        }
     }
 
     @Override
     public void updateViewOnQueryChange(String queryString) {
-        if (!isFragmentReady){
-            Log.d("Daisy","updateViewOnQueryChange called when " +
+        if (!isFragmentReady) {
+            Log.d("Daisy", "updateViewOnQueryChange called when " +
                     "TranslationFragment is not yet ready");
             return;
         }
@@ -160,7 +176,8 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
                 String translation = result.getTranslations();
                 String phonetic = result.getPhonetic();
                 String explains = result.getExplains();
-                textView.setText(translation + " " + phonetic + " " + explains);
+                TranslationFragment.this.translationBundle = translation + " " + phonetic + " " + explains;
+                setTranslation();
             }
 
             @Override
@@ -190,18 +207,9 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
                     return;
                 }
                 String mp3Address = result.getPhoneticMp3();
-                TranslationFragment.this.mp3PlayButton.setText(PRONOUNCE);
-                Log.d("Daisy", "phonetic onloadFinished with address of: " + mp3Address);
                 TranslationFragment.this.mp3Address = mp3Address;
-                try {
-                    TranslationFragment.this.mediaPlayer.setDataSource
-                            (mp3Address);
-                } catch (IOException e) {
-                    Log.e("Daisy", e.getMessage());
-                } catch (IllegalStateException e) {
-                    Log.e("Daisy", "IllegalStateException setDataSource " +
-                            "overflow");
-                }
+                Log.d("Daisy", "phonetic onloadFinished with address of: " + mp3Address);
+                setPhonetic();
             }
 
             @Override
@@ -209,6 +217,39 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
 
             }
         };
+    }
+
+    public String getTranslationBundle() {
+        return translationBundle;
+    }
+
+    public void setTranslationBundle(String translationBundle) {
+        this.translationBundle = translationBundle;
+    }
+
+    public String getMp3Address() {
+        return mp3Address;
+    }
+
+    public void setMp3Address(String mp3Address) {
+        this.mp3Address = mp3Address;
+    }
+
+    private void setPhonetic() {
+        TranslationFragment.this.mp3PlayButton.setText(PRONOUNCE);
+        try {
+            TranslationFragment.this.mediaPlayer.setDataSource
+                    (mp3Address);
+        } catch (IOException e) {
+            Log.e("Daisy", e.getMessage());
+        } catch (IllegalStateException e) {
+            Log.e("Daisy", "IllegalStateException setDataSource " +
+                    "overflow");
+        }
+    }
+
+    private void setTranslation() {
+        textView.setText(translationBundle);
     }
 
     public void playPhonetic() {

@@ -22,7 +22,7 @@ public class WordsListHolder {
         DAILY_LIST("daily100", MySQLiteHelper.TableNames.TABLE_DAILY_100),
         GRE_LIST("GREList", MySQLiteHelper.TableNames.TABLE_GRE_LIST),
         // Custom list must be the last one
-        CUSTOM_LIST("CustomList", MySQLiteHelper.TableNames.TABLE_CUSTOME);
+        CUSTOM_LIST("CustomList", MySQLiteHelper.TableNames.TABLE_CUSTOM);
 
         public String getListName() {
             return listName;
@@ -84,7 +84,7 @@ public class WordsListHolder {
             testingList = new ConcurrentHashMap<>();
             String[] words = resources.getStringArray(R.array.testing_list);
             for (String word : words) {
-                testingList.put(word, new WordsEntry(null, null, false, word));
+                testingList.put(word, new WordsEntry(null, null, false, word,null,null));
             }
             refreshList(testingList, ListName.TESTING_LIST);
             return testingList;

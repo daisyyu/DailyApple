@@ -10,14 +10,16 @@ import android.util.Log;
  */
 public class MySQLiteHelper extends SQLiteOpenHelper {
     public static enum TableNames {
-        TABLE_TESTING_LIST,TABLE_GRE_LIST,TABLE_DAILY_100,TABLE_CUSTOME;
+        TABLE_TESTING_LIST, TABLE_GRE_LIST, TABLE_DAILY_100, TABLE_CUSTOM;
     }
 
-    public static final String TABLE_TESTING_LIST = "testingList";
     public static final String COLUMN_IS_LEARNED = "isLearned";
     public static final String COLUMN_PERSONAL_HINT = "personalHint";
     public static final String COLUMN_IMAGE_HINT = "imageHint";
     public static final String COLUMN_WORD = "word";
+    public static final String COLUMN_MP3 = "mp3";
+    public static final String COLUMN_TRANSLATION = "translation";
+
 
     private static final String DATABASE_NAME = "dailyApple.db";
     private static final int DATABASE_VERSION = 1;
@@ -26,7 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_CREATE = "create table %s (" + COLUMN_WORD
             + " text primary key, " + COLUMN_PERSONAL_HINT + " text, " +
             "" + COLUMN_IMAGE_HINT + " text, " + COLUMN_IS_LEARNED
-            + " integer);";
+            + " integer, " + COLUMN_MP3 + " text, " + COLUMN_TRANSLATION + " text);";
     private static final String DATABASE_DROP = "DROP TABLE IF EXISTS %s";
 
     public MySQLiteHelper(Context context) {

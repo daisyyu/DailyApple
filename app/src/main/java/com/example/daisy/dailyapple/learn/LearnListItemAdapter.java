@@ -66,11 +66,13 @@ public class LearnListItemAdapter extends ArrayAdapter<String> {
         holder.wordsTextView.setText(keyArray[position]);
         String wordsTextDisplayableText;
         if (isReview) {
-            wordsTextDisplayableText = "Review it!";
+//            wordsTextDisplayableText = "Review it!";
+            wordsTextDisplayableText = entry.getTranslation();
             row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
         } else {
             if (entry.isLearned()) {
-                wordsTextDisplayableText = "You already leanred it";
+//                wordsTextDisplayableText = "You already leanred it";
+                wordsTextDisplayableText = entry.getTranslation();
                 row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
             } else {
                 wordsTextDisplayableText = "Lean it now";

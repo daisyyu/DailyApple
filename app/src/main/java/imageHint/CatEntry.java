@@ -10,6 +10,7 @@ public class CatEntry {
     private String icon;
     private String title;
 
+
     public CatEntry(String icon, String title) {
         this.icon = icon;
         this.title = title;

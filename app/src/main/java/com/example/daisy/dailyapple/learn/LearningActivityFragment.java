@@ -81,7 +81,7 @@ public class LearningActivityFragment extends Fragment implements
         fragmentManager.beginTransaction().add(R.id
                         .buttomFragmentPlaceHolder,
                 bottomFragment).commit();
-        translationFragment = TranslationFragment.newInstance(searchQuery);
+        translationFragment = TranslationFragment.newInstance(searchQuery, wordsEntry.getPhoneticMP3Address(), wordsEntry.getTranslation());
         fragmentManager.beginTransaction().add(R.id
                 .translationFragmentLearnPlaceHolder, translationFragment)
                 .commit();
@@ -126,6 +126,10 @@ public class LearningActivityFragment extends Fragment implements
         wordsEntry.setIconHint(imageIcon);
         wordsEntry.setPersonalHint(personalHint);
         wordsEntry.setIsLearned(true);
+        final String mp3Address = ((TranslationFragment) translationFragment).getMp3Address();
+        final String translation = ((TranslationFragment) translationFragment).getTranslationBundle();
+        wordsEntry.setPhoneticMP3Address(mp3Address);
+        wordsEntry.setTranslation(translation);
         bottomFragment = LearnedWithoutTranslationFragment.newInstance
                 (searchQuery, listName);
         fragmentManager.beginTransaction().replace(R.id
