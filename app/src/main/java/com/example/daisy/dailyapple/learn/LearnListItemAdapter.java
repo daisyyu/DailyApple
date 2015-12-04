@@ -1,9 +1,12 @@
 package com.example.daisy.dailyapple.learn;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,14 +72,18 @@ public class LearnListItemAdapter extends ArrayAdapter<String> {
 //            wordsTextDisplayableText = "Review it!";
             wordsTextDisplayableText = entry.getTranslation();
             row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
+            holder.isLearnedTextView.setGravity(Gravity.START);
         } else {
             if (entry.isLearned()) {
 //                wordsTextDisplayableText = "You already leanred it";
                 wordsTextDisplayableText = entry.getTranslation();
                 row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
+                holder.isLearnedTextView.setGravity(Gravity.START);
             } else {
+                // Not learned
                 wordsTextDisplayableText = "Lean it now";
                 row.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+                holder.isLearnedTextView.setGravity(Gravity.END);
             }
         }
         holder.isLearnedTextView.setText(wordsTextDisplayableText);

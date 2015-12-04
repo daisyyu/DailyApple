@@ -69,6 +69,7 @@ public class WordsDAO {
                             "wordsList");
                     continue;
                 }
+                //TODO: should retrieve column number via CONST
                 String imageHint = cursor.getString(2);
                 String personalHint = cursor.getString(1);
                 String mp3 = cursor.getString(4);
