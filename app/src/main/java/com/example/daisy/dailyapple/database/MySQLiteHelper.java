@@ -11,22 +11,35 @@ import com.example.daisy.dailyapple.DAO.WordsListHolder;
  */
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
-    public static final String COLUMN_IS_LEARNED = "isLearned";
-    public static final String COLUMN_PERSONAL_HINT = "personalHint";
-    public static final String COLUMN_IMAGE_HINT = "imageHint";
-    public static final String COLUMN_WORD = "word";
-    public static final String COLUMN_MP3 = "mp3";
-    public static final String COLUMN_TRANSLATION = "translation";
+
+    public enum Column {
+        COLUMN_IS_LEARNED("isLearned"),
+        COLUMN_PERSONAL_HINT("personalHint"),
+        COLUMN_IMAGE_HINT("imageHint"),
+        COLUMN_WORD("word"),
+        COLUMN_MP3("mp3"),
+        COLUMN_TRANSLATION("translation");
+
+        private String val;
+
+        Column(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+    }
 
 
     private static final String DATABASE_NAME = "dailyApple.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table %s (" + COLUMN_WORD
-            + " text primary key, " + COLUMN_PERSONAL_HINT + " text, " +
-            "" + COLUMN_IMAGE_HINT + " text, " + COLUMN_IS_LEARNED
-            + " integer, " + COLUMN_MP3 + " text, " + COLUMN_TRANSLATION + " text);";
+    private static final String DATABASE_CREATE = "create table %s (" + Column.COLUMN_WORD.getVal()
+            + " text primary key, " + Column.COLUMN_PERSONAL_HINT.getVal() + " text, " +
+            "" + Column.COLUMN_IMAGE_HINT.getVal() + " text, " + Column.COLUMN_IS_LEARNED.getVal()
+            + " integer, " + Column.COLUMN_MP3.getVal() + " text, " + Column.COLUMN_TRANSLATION.getVal() + " text);";
     private static final String DATABASE_DROP = "DROP TABLE IF EXISTS %s";
 
     public MySQLiteHelper(Context context) {

@@ -36,19 +36,21 @@ public class LearningActivityFragment extends Fragment implements
     Fragment bottomFragment;
     FragmentManager fragmentManager;
     SharedPreferences sharedPref;
+
     private WordsEntry wordsEntry;
     private String searchQuery;
+
     private WordsListHolder.ListName listName;
+
     private WordsListHolder wordsListHolder;
     private boolean isReview;
-
     static public String SEARCH_QUERY_KEY = "searchQuery";
+
     static public String LISTNAME_KEY = "listName";
     static public String IS_REVIEW_KEY = "isReview";
-
-
     public LearningActivityFragment() {
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,7 +121,6 @@ public class LearningActivityFragment extends Fragment implements
 //        }
     }
 
-
     @Override
     public void onChildGotIt(final String personalHint, final String
             imageIcon) {
@@ -138,5 +139,19 @@ public class LearningActivityFragment extends Fragment implements
         // Write to database on the ASAP to prevent data loss
         WordsDAO wordsDAO = new WordsDAO(getActivity(), listName);
         wordsDAO.addWordsEntry(wordsEntry);
+    }
+
+
+    /**
+     * For child Fragments to access the current WordsEntry in mem
+     *
+     * @return
+     */
+    public WordsEntry getWordsEntry() {
+        return wordsEntry;
+    }
+
+    public WordsListHolder.ListName getListName() {
+        return listName;
     }
 }

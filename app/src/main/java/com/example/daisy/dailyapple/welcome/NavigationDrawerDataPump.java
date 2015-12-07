@@ -149,12 +149,12 @@ public class NavigationDrawerDataPump {
 
                 case TESTING_LIST:
                     break;
-                case DAILY_LIST:
-                    break;
-                case GRE_LIST:
-                    break;
-                case CUSTOM_LIST:
-                    break;
+//                case DAILY_LIST:
+//                    break;
+//                case GRE_LIST:
+//                    break;
+//                case CUSTOM_LIST:
+//                    break;
             }
             return null;
         }

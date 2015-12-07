@@ -19,9 +19,9 @@ public class WordsDAO {
     // Database fields
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
-    private String[] allColumns = {MySQLiteHelper.COLUMN_WORD,
-            MySQLiteHelper.COLUMN_IS_LEARNED, MySQLiteHelper
-            .COLUMN_IMAGE_HINT, MySQLiteHelper.COLUMN_PERSONAL_HINT};
+    //    private String[] allColumns = {MySQLiteHelper.COLUMN_WORD,
+//            MySQLiteHelper.COLUMN_IS_LEARNED, MySQLiteHelper
+//            .COLUMN_IMAGE_HINT, MySQLiteHelper.COLUMN_PERSONAL_HINT};
     private Context context;
     private WordsListHolder.ListName listName;
 
@@ -39,19 +39,46 @@ public class WordsDAO {
     public void addWordsEntry(WordsEntry wordsEntry) {
         openForWrite();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MySQLiteHelper.COLUMN_WORD, wordsEntry.getWord());
-        contentValues.put(MySQLiteHelper.COLUMN_IMAGE_HINT, wordsEntry.getIconHint());
+        contentValues.put(MySQLiteHelper.Column.COLUMN_WORD.getVal(), wordsEntry.getWord());
+        contentValues.put(MySQLiteHelper.Column.COLUMN_IMAGE_HINT.getVal(), wordsEntry.getIconHint());
         int isLeanred = wordsEntry.isLearned() ? 1 : 0;
-        contentValues.put(MySQLiteHelper.COLUMN_IS_LEARNED, isLeanred);
-        contentValues.put(MySQLiteHelper.COLUMN_PERSONAL_HINT, wordsEntry.getPersonalHint());
-        contentValues.put(MySQLiteHelper.COLUMN_MP3, wordsEntry.getPhoneticMP3Address());
-        contentValues.put(MySQLiteHelper.COLUMN_TRANSLATION, wordsEntry.getTranslation());
+        contentValues.put(MySQLiteHelper.Column.COLUMN_IS_LEARNED.getVal(), isLeanred);
+        contentValues.put(MySQLiteHelper.Column.COLUMN_PERSONAL_HINT.getVal(), wordsEntry.getPersonalHint());
+        contentValues.put(MySQLiteHelper.Column.COLUMN_MP3.getVal(), wordsEntry.getPhoneticMP3Address());
+        contentValues.put(MySQLiteHelper.Column.COLUMN_TRANSLATION.getVal(), wordsEntry.getTranslation());
         database.insert(listName.name(), null, contentValues);
     }
 
     public void getWordsEntry(String word) {
         openForRead();
         // TODO
+    }
+
+    public void updateWordsWithColumn(String words, MySQLiteHelper.Column columnName, Object value) {
+        Log.d("Daisy", "executing updateWordsWithColumn");
+        openForWrite();
+        ContentValues contentValues = new ContentValues();
+        switch (columnName) {
+            case COLUMN_IS_LEARNED:
+                contentValues.put(columnName.getVal(), (int) value);
+                break;
+            case COLUMN_PERSONAL_HINT:
+                contentValues.put(columnName.getVal(), (String) value);
+                break;
+            case COLUMN_IMAGE_HINT:
+                contentValues.put(columnName.getVal(), (String) value);
+                break;
+            case COLUMN_WORD:
+                contentValues.put(columnName.getVal(), (String) value);
+                break;
+            case COLUMN_MP3:
+                contentValues.put(columnName.getVal(), (String) value);
+                break;
+            case COLUMN_TRANSLATION:
+                contentValues.put(columnName.getVal(), (String) value);
+                break;
+        }
+        database.update(listName.name(), contentValues, "word=?", new String[]{words});
     }
 
     public void getALLWordsEntryAndUpdateConcurrentMap(Map<String, WordsEntry> map) {

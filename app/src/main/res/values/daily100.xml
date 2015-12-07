@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="daily100">
+        <item>
+            phone
+        </item>
+        <item>
+            banana
+        </item>
+        <item>
+            movie
+        </item>
+        <item>
+            network
+        </item>
+    </string-array>
+</resources>

@@ -17,7 +17,12 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.TextView;
+import com.example.daisy.dailyapple.DAO.WordsDAO;
+import com.example.daisy.dailyapple.DAO.WordsEntry;
+import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
+import com.example.daisy.dailyapple.database.MySQLiteHelper;
+import com.example.daisy.dailyapple.learn.LearningActivityFragment;
 import com.example.daisy.dailyapple.translation.loaders.*;
 
 import java.io.IOException;
@@ -36,6 +41,10 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
     public LoaderManager.LoaderCallbacks<IResult> phoneticCallback;
     public static final String SPACE = " ";
     private TextView textView;
+    private WordsEntry wordsEntry;
+    private WordsListHolder.ListName listName;
+    private boolean isLearned;
+    private WordsDAO wordsDAO;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
@@ -114,6 +123,11 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
                 }
             }
         });
+        LearningActivityFragment parentFragment = (LearningActivityFragment) getParentFragment();
+        this.listName = parentFragment.getListName();
+        this.wordsDAO = new WordsDAO(getActivity(), listName);
+        this.wordsEntry = parentFragment.getWordsEntry();
+        this.isLearned = wordsEntry.isLearned();
         if (TextUtils.isEmpty(translationBundle) || TextUtils.isEmpty(mp3Address)) {
             initLoaderCallBack();
         }
@@ -236,6 +250,11 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
     }
 
     private void setPhonetic() {
+        // if isLearned and we are still loading the loader, that means phonetic wasn't able to be saved to DB or mem in the first shoot. Try writing to both.
+        // write to mem hashmap
+        wordsEntry.setPhoneticMP3Address(mp3Address);
+        // wite to db
+        wordsDAO.updateWordsWithColumn(wordsEntry.getWord(), MySQLiteHelper.Column.COLUMN_MP3, mp3Address);
         TranslationFragment.this.mp3PlayButton.setText(PRONOUNCE);
         try {
             TranslationFragment.this.mediaPlayer.setDataSource
@@ -249,6 +268,14 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
     }
 
     private void setTranslation() {
+        // if isLearned and we are still loading the loader, that means translation wasn't able to be saved to DB or mem in the first shoot. Try writing to both.
+        // write to mem hashmap
+        wordsEntry.setTranslation(translationBundle);
+        // wite to db
+        wordsDAO.updateWordsWithColumn(wordsEntry.getWord(), MySQLiteHelper.Column.COLUMN_TRANSLATION, translationBundle);
+        if (isLearned) {
+
+        }
         textView.setText(translationBundle);
     }
 
@@ -257,7 +284,11 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
             mediaPlayer.seekTo(0);
             return;
         }
-        mediaPlayer.prepareAsync();
+        try {
+            mediaPlayer.prepareAsync();
+        } catch (IllegalStateException e) {
+            Log.d("Daisy", "IllegalStateException: " + e + " User trying to lick Phonetic too often");
+        }
 
     }
 

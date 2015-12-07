@@ -107,14 +107,17 @@ public class LearningWithoutTranslationFragment extends Fragment implements Sear
                 String imageIcon = ((ImageHintFragment) imageHintFragment)
                         .getCheckedImage();
                 String personalHint = personalHintEditText.getText().toString();
-                if (!TextUtils.isEmpty(imageIcon)) {
-                    ((OnGotitListener) parentFragment).onChildGotIt
-                            (personalHint, imageIcon);
-                } else {
-                    Toast.makeText(getActivity(), "You need a image to " +
-                            "refresh you mind, don't ya?", Toast
-                            .LENGTH_SHORT).show();
-                }
+                // Sometimes images are not intuitive to the corresponding words,permits saving words when neither imageHint and personal hint is submitted
+                ((OnGotitListener) parentFragment).onChildGotIt
+                        (personalHint, imageIcon);
+//                if (!TextUtils.isEmpty(imageIcon)) {
+//                    ((OnGotitListener) parentFragment).onChildGotIt
+//                            (personalHint, imageIcon);
+//                } else {
+//                    Toast.makeText(getActivity(), "You need a image to " +
+//                            "refresh you mind, don't ya?", Toast
+//                            .LENGTH_SHORT).show();
+//                }
             }
         });
     }

@@ -19,6 +19,7 @@ import com.example.daisy.dailyapple.DAO.WordsEntry;
 import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -90,7 +91,7 @@ public class LearnListFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         listView = getListView();
 //      specify what layout each row has
-        adapter = new LearnListItemAdapter(getActivity(), R.layout.learn_listview_item_row,isReview);
+        adapter = new LearnListItemAdapter(getActivity(), R.layout.learn_listview_item_row, isReview);
         setListAdapter(adapter);
         initLoaderCallBack();
     }
@@ -114,7 +115,7 @@ public class LearnListFragment extends ListFragment {
         intent.putExtra(EXTRA_WORDS_LIST, keyArray);
         intent.putExtra(EXTRA_CLICK_POSITION, position);
         intent.putExtra(EXTRA_LIST_NAME, listName);
-        intent.putExtra(EXTRA_LIST_IS_REVIEW,isReview);
+        intent.putExtra(EXTRA_LIST_IS_REVIEW, isReview);
         startActivity(intent);
     }
 
@@ -161,6 +162,8 @@ public class LearnListFragment extends ListFragment {
                 keyArray = new String[data.size()];
                 final Set<String> keySet = data.keySet();
                 keyArray = keySet.toArray(keyArray);
+                // sort the key array so it is of arphabetical order
+                Arrays.sort(keyArray);
                 adapter.setData(data, keyArray);
                 adapter.notifyDataSetChanged();
                 Log.d("Daisy", "onLoadFinished reaches end LearnListFragment");
