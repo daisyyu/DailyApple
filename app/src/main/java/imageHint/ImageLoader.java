@@ -175,6 +175,10 @@ public class ImageLoader {
                 Bitmap bmp = getBitmap(photoToLoad.url);
                 // keep polling from backup so we don't have an empty item
                 while (bmp == null) {
+                    if (backupHolder == null) {
+                        Log.d("Daisy", "backup holder is null, give in without displaying image");
+                        return;
+                    }
                     // synchronized?
                     String newUrl = backupHolder.getBackupList().poll()
                             .getIcon();

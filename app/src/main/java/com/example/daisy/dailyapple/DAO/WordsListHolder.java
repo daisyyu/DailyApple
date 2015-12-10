@@ -23,7 +23,7 @@ public class WordsListHolder {
      * ListName are also table names
      */
     public enum ListName {
-        TESTING_LIST("testingList", R.array.testing_list, false),
+        TESTING_LIST("testingList", R.array.testing_list, true),
         DAILY_LIST("daily2000", R.array.daily_2000, false),
         GRE_LIST("GREList", R.array.gre_list, false),
         //        // Custom list must be the last one

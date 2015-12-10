@@ -3,19 +3,21 @@ package com.example.daisy.dailyapple.learn;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
+import com.example.daisy.dailyapple.welcome.NavigationDrawerActivity;
 import com.example.daisy.dailyapple.welcome.NavigationDrawerFragment;
 
-public class LearnListActivity extends AppCompatActivity {
+public class LearnListActivity extends NavigationDrawerActivity {
 
     private WordsListHolder.ListName listName;
     private boolean isReview;
-    FragmentManager fragmentManager;
     Fragment learnListFragment;
     public static final String LIST_NAME_EXTRA = "listNameExtra";
     public static final String IS_REVIEW_BOOLEAN_EXTRA = "isReviewBoolean";
@@ -28,11 +30,14 @@ public class LearnListActivity extends AppCompatActivity {
         isReview = intent.getBooleanExtra(IS_REVIEW_BOOLEAN_EXTRA, false);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_learn_list);
-        NavigationDrawerFragment.injectNavigationDrawer(this);
-        fragmentManager = getSupportFragmentManager();
         learnListFragment = LearnListFragment.newInstance(listName, isReview);
         fragmentManager.beginTransaction().add(R.id
-                .learnListFragmentPlaceHolder, learnListFragment).commit();
+                .container, learnListFragment).commit();
+    }
+
+    protected void showActivityContextActionBar() {
+        String prefix = isReview ? "Review " : "Learning ";
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(prefix + listName.getListName());
     }
 }

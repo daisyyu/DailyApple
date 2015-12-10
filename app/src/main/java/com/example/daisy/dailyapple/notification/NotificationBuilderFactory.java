@@ -3,11 +3,13 @@ package com.example.daisy.dailyapple.notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import com.example.daisy.dailyapple.MainActivity;
 import com.example.daisy.dailyapple.R;
+import com.example.daisy.dailyapple.welcome.WelcomeActivity;
 
 /**
  * Created by Daisy on 10/18/15.
@@ -49,19 +51,16 @@ public class NotificationBuilderFactory {
 
     private NotificationCompat.Builder
     createRepeatingReminderNotificationBuilder() {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.outHeight=200;
-        options.outWidth=200;
-
+        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R
+                .drawable.apple);
+        largeIcon = Bitmap.createScaledBitmap(largeIcon, 200, 200, false);
         NotificationCompat.Builder builder = new NotificationCompat.Builder
-                (context).setSmallIcon(R.drawable.cat1).setLargeIcon
-                (BitmapFactory.decodeResource(context.getResources(), R
-                        .drawable.cat1,options ))
+                (context).setSmallIcon(R.drawable.apple).setLargeIcon
+                (largeIcon)
                 .setContentTitle
-                        ("My " +
-                                "notification").setAutoCancel(true)
-                .setContentText("Hello World!");
-        Intent resultIntent = new Intent(context, MainActivity.class);
+                        ("Ready to learn more words?").setAutoCancel(true)
+                .setContentText("Tab to start!");
+        Intent resultIntent = new Intent(context, WelcomeActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
                 resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);

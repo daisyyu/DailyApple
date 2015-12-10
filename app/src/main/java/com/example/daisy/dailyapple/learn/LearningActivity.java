@@ -41,7 +41,7 @@ public class LearningActivity extends FragmentActivity {
         // set view pager
         setContentView(R.layout.activity_learning);
         pagerAdapter = new LearningViewPagerAdapter(getSupportFragmentManager
-                (), list, listName,isReview);
+                (), list, listName, isReview);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         int position = intent.getIntExtra(LearnListFragment

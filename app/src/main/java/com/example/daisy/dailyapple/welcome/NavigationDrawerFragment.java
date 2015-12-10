@@ -1,7 +1,9 @@
 package com.example.daisy.dailyapple.welcome;
 
+import android.app.NativeActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -28,6 +30,7 @@ import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
 import com.example.daisy.dailyapple.learn.LearnListActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,8 +71,14 @@ public class NavigationDrawerFragment extends Fragment implements
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-    private String currentTitle;
+    //    private String currentTitle;
     public NavigationDrawerDataPump navigationDrawerDataPump;
+    private int childPosition;
+    private int parentPosition;
+    public static final String CHILD_POSITION_EXTRA = "childPositionExtra";
+    public static final String PARENT_POSITION_EXTRA = "parentPositionExtra";
+
+    private ExpandableListAdapter adapter;
 
     public NavigationDrawerFragment() {
     }
@@ -88,52 +97,6 @@ public class NavigationDrawerFragment extends Fragment implements
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
-
-        // Select either the default item (0) or the last selected item.
-//        selectItem(mCurrentSelectedPosition);
-
-//        mCallbacks = new NavigationDrawerCallbacks() {
-//            @Override
-//            public void onNavigationDrawerItemSelected(int position) {
-//                Intent intent;
-//                if (position == mCurrentSelectedPosition) {
-//                    Log.d("Daisy", "NavigationDrawerFragment we are currenlty at " +
-//                            "" + position + " no change is made");
-//                    return;
-//                }
-//                mCurrentSelectedPosition = position;
-//                switch (position) {
-//                    case 0:
-//                        // TODO: need optimization Home
-//                        intent = new Intent(getActivity(),
-//                                WelcomeActivity.class);
-//                        startActivity(intent);
-//                        break;
-//                    case 1:
-//                        // Learn
-//                        break;
-//                    case 2:
-//                        // Learn List
-//                        intent = new Intent(getActivity(),
-//                                LearnListActivity.class);
-//                        intent.putExtra(LearnListActivity.LIST_NAME_EXTRA,
-//                                WordsListHolder.ListName.TESTING_LIST);
-//                        startActivity(intent);
-//                        break;
-//                    case 3:
-//                        // Learn daily 100
-//                        break;
-//                    case 4:
-//                        // Learn gre
-//                        break;
-//                    case 5:
-//                        // review
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//        };
     }
 
     @Override
@@ -141,6 +104,9 @@ public class NavigationDrawerFragment extends Fragment implements
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
+        childPosition = ((NavigationDrawerActivity) getActivity()).getChildPosition();
+        parentPosition = ((NavigationDrawerActivity) getActivity()).getParentPosition();
+        adapter.setCurrentPositions(parentPosition, childPosition);
     }
 
     @Override
@@ -150,9 +116,10 @@ public class NavigationDrawerFragment extends Fragment implements
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView.setOnChildClickListener(this);
         mDrawerListView.setOnGroupClickListener(this);
-        mDrawerListView.setAdapter(new ExpandableListAdapter(getActivity(),
+        adapter = new ExpandableListAdapter(getActivity(),
                 navigationDrawerDataPump.getListDataHeader(),
-                navigationDrawerDataPump.getListChildData()));
+                navigationDrawerDataPump.getListChildData());
+        mDrawerListView.setAdapter(adapter);
         // TODO
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -196,7 +163,7 @@ public class NavigationDrawerFragment extends Fragment implements
                 if (!isAdded()) {
                     return;
                 }
-
+                // invalidates it so actionBar will be force recreated
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
@@ -215,7 +182,7 @@ public class NavigationDrawerFragment extends Fragment implements
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
-
+                // invalidates it so actionBar will be force recreated
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
@@ -240,20 +207,6 @@ public class NavigationDrawerFragment extends Fragment implements
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
-
-//    private void selectItem(int position) {
-//        // set current title
-//        currentTitle = "hello Daisy";
-//        if (mDrawerListView != null) {
-//            mDrawerListView.setItemChecked(position, true);
-//        }
-//        if (mDrawerLayout != null) {
-//            mDrawerLayout.closeDrawer(mFragmentContainerView);
-//        }
-//        if (mCallbacks != null) {
-//            mCallbacks.onNavigationDrawerItemSelected(position);
-//        }
-//    }
 
     public void closeDrawer() {
         if (mDrawerLayout != null) {
@@ -282,9 +235,7 @@ public class NavigationDrawerFragment extends Fragment implements
             inflater.inflate(R.menu.global, menu);
             showGlobalContextActionBar();
         } else {
-            // inflat fragment specific menu
-            inflater.inflate(R.menu.global, menu);
-            getActionBar().setTitle(currentTitle);
+            // Let individual activity handle it
         }
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -326,6 +277,10 @@ public class NavigationDrawerFragment extends Fragment implements
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        if (childPosition == this.childPosition && groupPosition == this.parentPosition) {
+            // clicking on the item where we are currently in should not take any effect
+            return true;
+        }
         closeDrawer();
         NavigationDrawerDataPump.GroupItem groupItem =
                 navigationDrawerDataPump.getListDataHeader().get(groupPosition);
@@ -342,6 +297,8 @@ public class NavigationDrawerFragment extends Fragment implements
                         false);
                 intent.putExtra(LearnListActivity.LIST_NAME_EXTRA,
                         childItem.listName);
+                intent.putExtra(CHILD_POSITION_EXTRA, childPosition);
+                intent.putExtra(PARENT_POSITION_EXTRA, groupPosition);
                 startActivity(intent);
                 break;
             case REVIEW:
@@ -350,6 +307,8 @@ public class NavigationDrawerFragment extends Fragment implements
                         true);
                 intent.putExtra(LearnListActivity.LIST_NAME_EXTRA,
                         childItem.listName);
+                intent.putExtra(CHILD_POSITION_EXTRA, childPosition);
+                intent.putExtra(PARENT_POSITION_EXTRA, groupPosition);
                 startActivity(intent);
                 break;
             case TEST:
@@ -365,9 +324,14 @@ public class NavigationDrawerFragment extends Fragment implements
         NavigationDrawerDataPump.GroupItem groupItem =
                 navigationDrawerDataPump.getListDataHeader().get(groupPosition);
         if (!groupItem.isExpandable) {
+            if (groupPosition == this.parentPosition) {
+                // clicking on the item where we are currently in should not take any effect
+                return true;
+            }
             closeDrawer();
             if (groupItem.parentTitle == NavigationDrawerDataPump.ParentTitle.HOME) {
                 Intent intent = new Intent(getActivity(), WelcomeActivity.class);
+                intent.putExtra(PARENT_POSITION_EXTRA, groupPosition);
                 startActivity(intent);
             }
             // TODO: launch settings activity

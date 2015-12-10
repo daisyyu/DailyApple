@@ -48,6 +48,9 @@ public class NavigationDrawerDataPump {
             // test
             List<ChildItem> testList = new ArrayList<>();
             for (WordsListHolder.ListName listName : WordsListHolder.ListName.values()) {
+                if (listName.isHidden()) {
+                    continue;
+                }
                 learnList.add(new ChildItem(listName.getListName(), listName,
                         fragmentManager, ParentTitle.LEARNING));
                 reviewList.add(new ChildItem(listName.getListName(), listName,
@@ -56,7 +59,7 @@ public class NavigationDrawerDataPump {
                         fragmentManager, ParentTitle.TEST));
             }
             // learning list doesn't need custom list
-            learnList.remove(WordsListHolder.ListName.values().length - 1);
+            learnList.remove(learnList.size() - 1);
             // put into HashMap
             listChildData.put(ParentTitle.LEARNING, learnList);
             listChildData.put(ParentTitle.REVIEW, reviewList);

@@ -29,6 +29,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             List<NavigationDrawerDataPump.ChildItem>> _listDataChild;
     private static StateListDrawable stateListIndicatorDrawableUp;
     private static StateListDrawable stateListIndicatorDrawableDown;
+    private int childPosition;
+    private int parentPosition;
 
     public ExpandableListAdapter(Context context,
                                  List<NavigationDrawerDataPump.GroupItem> listDataHeader,
@@ -38,6 +40,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
+    }
+
+    public void setCurrentPositions(int parentPosition, int childPosition) {
+        this.parentPosition = parentPosition;
+        this.childPosition = childPosition;
     }
 
     @Override
@@ -64,6 +71,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_item, null);
+        }
+        if (groupPosition == this.parentPosition && childPosition == this.childPosition) {
+            //highlight it
+            convertView.setBackgroundColor(_context.getResources().getColor(android.R.color.holo_orange_light));
         }
 
         TextView txtListChild = (TextView) convertView
@@ -105,6 +116,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_group, null);
+        }
+        if (groupPosition == this.parentPosition) {
+            //highlight it
+            convertView.setBackgroundColor(_context.getResources().getColor(android.R.color.holo_green_light));
         }
 
         TextView lblListHeader = (TextView) convertView
