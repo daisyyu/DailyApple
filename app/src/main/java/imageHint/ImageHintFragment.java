@@ -18,7 +18,6 @@ import android.widget.*;
 import com.example.daisy.dailyapple.R;
 import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,14 +32,15 @@ public class ImageHintFragment extends ListFragment implements
         SearchQueryChangeListener {
     public static final String SPACE = " ";
     private OnFragmentInteractionListener mListener;
-    LoaderManager.LoaderCallbacks<List<CatEntry>> callback;
+    LoaderManager.LoaderCallbacks<List<ImageEntry>> callback;
     String searchTarget;
-    CatAdapter adapter;
+    ImageHintAdapter adapter;
     ListView listView;
 
-    String checkedImage;
+    private String checkedImage;
+    private RadioButton checkedRadioButton;
 
-    List<CatEntry> catEntries;
+    List<ImageEntry> imageEntries;
     private boolean isFragmentReady = false;
 
     public ImageHintFragment() {
@@ -69,8 +69,9 @@ public class ImageHintFragment extends ListFragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         listView = getListView();
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 //      specify what layout each row has
-        adapter = new CatAdapter(getActivity(), R.layout.listview_item_row);
+        adapter = new ImageHintAdapter(getActivity(), R.layout.listview_item_row);
 //        View header = (View) getActivity().getLayoutInflater().inflate(R.layout
 //                .listview_header_row, null);
 //        listView.addHeaderView(header);
@@ -82,20 +83,18 @@ public class ImageHintFragment extends ListFragment implements
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Log.d("Daisy", "ImageHintFragment,onItemClick: " + position);
-        if (catEntries == null) {
-            Log.d("Daisy", "catEntries are not ready, ignore onListitemClick ");
+        if (imageEntries == null) {
+            Log.d("Daisy", "imageEntries are not ready, ignore onListitemClick ");
             return;
         }
-        CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
-        if (checkBox.isChecked()) {
-            //remove from list
-//            checkedImages.remove(catEntries.get(position).getIcon());
-            checkedImage = null;
-        } else {
-//            checkedImages.add(catEntries.get(position).getIcon());
-            checkedImage = catEntries.get(position).getIcon();
+        RadioButton clickedRadioButton = (RadioButton) v.findViewById(R.id.radioButton);
+        // uncheck previously checked radio buttons
+        if (checkedRadioButton != null) {
+            checkedRadioButton.setChecked(false);
         }
-        checkBox.performClick();
+        checkedRadioButton = clickedRadioButton;
+        checkedRadioButton.setChecked(true);
+        checkedImage = imageEntries.get(position).getIcon();
         Log.d("Daisy", "ImageHintFragment,after onItemClick, checkedImages are" +
                 " now: " + checkedImage);
     }
@@ -139,24 +138,24 @@ public class ImageHintFragment extends ListFragment implements
 
     private void initLoaderCallBack() {
         LoaderManager loaderManager = getLoaderManager();
-        callback = new LoaderManager.LoaderCallbacks<List<CatEntry>>() {
+        callback = new LoaderManager.LoaderCallbacks<List<ImageEntry>>() {
             @Override
-            public Loader<List<CatEntry>> onCreateLoader(int id, Bundle args) {
-                CatEntryLoader loader = new CatEntryLoader(getActivity());
+            public Loader<List<ImageEntry>> onCreateLoader(int id, Bundle args) {
+                ImageEntryLoader loader = new ImageEntryLoader(getActivity());
                 loader.setSearchStr(searchTarget);
                 return loader;
             }
 
             @Override
-            public void onLoadFinished(Loader<List<CatEntry>> loader, List<CatEntry> data) {
+            public void onLoadFinished(Loader<List<ImageEntry>> loader, List<ImageEntry> data) {
                 Log.d("Daisy", "onLoadFinished ImageHintFragment");
                 adapter.setData(data);
-                catEntries = data;
+                imageEntries = data;
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onLoaderReset(Loader<List<CatEntry>> loader) {
+            public void onLoaderReset(Loader<List<ImageEntry>> loader) {
 
             }
         };

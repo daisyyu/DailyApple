@@ -1,6 +1,6 @@
 package com.example.daisy.dailyapple.translation;
 
-import imageHint.CatEntry;
+import imageHint.ImageEntry;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,14 +21,14 @@ public class AzureJSONParserImpl implements IJSONParser {
             JSONObject topJsonObject = json.getJSONObject("d");
             JSONArray resultJsonArray = topJsonObject.getJSONArray
                     ("results");
-            List<CatEntry> catEntryList = new ArrayList<>();
+            List<ImageEntry> imageEntryList = new ArrayList<>();
             for (int i = 0; i < resultJsonArray.length(); i++) {
                 JSONObject jsonObject = resultJsonArray.getJSONObject(i);
-                CatEntry catEntry = new CatEntry(jsonObject.getString
+                ImageEntry imageEntry = new ImageEntry(jsonObject.getString
                         ("MediaUrl"), "");
-                catEntryList.add(catEntry);
+                imageEntryList.add(imageEntry);
             }
-            result.setCatEntryList(catEntryList);
+            result.setImageEntryList(imageEntryList);
             result.setResultStatus(true);
         } catch (JSONException e) {
             throw new JSONParserException(e);
@@ -37,7 +37,7 @@ public class AzureJSONParserImpl implements IJSONParser {
     }
 
     public static class Result implements IResult {
-        private List<CatEntry> catEntryList;
+        private List<ImageEntry> imageEntryList;
         private boolean isResultOK;
 
         @Override
@@ -50,12 +50,12 @@ public class AzureJSONParserImpl implements IJSONParser {
             isResultOK = resultStatus;
         }
 
-        public List<CatEntry> getCatEntryList() {
-            return catEntryList;
+        public List<ImageEntry> getImageEntryList() {
+            return imageEntryList;
         }
 
-        public void setCatEntryList(List<CatEntry> catEntryList) {
-            this.catEntryList = catEntryList;
+        public void setImageEntryList(List<ImageEntry> imageEntryList) {
+            this.imageEntryList = imageEntryList;
         }
 
     }

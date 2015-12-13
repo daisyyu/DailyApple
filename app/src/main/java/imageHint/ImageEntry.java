@@ -3,15 +3,15 @@ package imageHint;
 /**
  * Created by Daisy on 10/5/15.
  */
-public class CatEntry {
-    public CatEntry() {
+public class ImageEntry {
+    public ImageEntry() {
     }
 
     private String icon;
     private String title;
 
 
-    public CatEntry(String icon, String title) {
+    public ImageEntry(String icon, String title) {
         this.icon = icon;
         this.title = title;
     }

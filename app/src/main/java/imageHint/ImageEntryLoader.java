@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by Daisy on 10/6/15.
  */
-public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
+public class ImageEntryLoader extends AsyncTaskLoader<List<ImageEntry>> {
     //    private ProgressDialog dialog;
     private Context context;
     private String searchStr = "";
@@ -35,10 +35,10 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
         this.searchStr = searchStr;
     }
 
-    static CatEntry[] catEntries = new CatEntry[]{
-            new CatEntry("http://lifewallpaperz.com/images/2015/cute-cat/cute-cat-01.jpg", "Cat1"),
-            new CatEntry("http://i.ytimg.com/vi/p2H5YVfZVFw/hqdefault.jpg", "Cat2"),
-            new CatEntry("http://www.mycatnames.com/wp-content/uploads/2015/09/Great-Ideas-for-cute-cat-names-2.jpg", "Cat3"),
+    static ImageEntry[] catEntries = new ImageEntry[]{
+            new ImageEntry("http://lifewallpaperz.com/images/2015/cute-cat/cute-cat-01.jpg", "Cat1"),
+            new ImageEntry("http://i.ytimg.com/vi/p2H5YVfZVFw/hqdefault.jpg", "Cat2"),
+            new ImageEntry("http://www.mycatnames.com/wp-content/uploads/2015/09/Great-Ideas-for-cute-cat-names-2.jpg", "Cat3"),
     };
 
     @Override
@@ -49,15 +49,15 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
     }
 
     @Override
-    public List<CatEntry> loadInBackground() {
+    public List<ImageEntry> loadInBackground() {
         Log.d("Daisy", "loadInBackground LearnItemEntryLoader");
 //        List<WordsEntry> result = new ArrayList<>();
-//        result = Arrays.asList(catEntries);
+//        result = Arrays.asList(imageEntries);
         try {
 //            return getResultFromGoogleSearchAPI(searchStr);
             return getResultFromMicrosoftAzureAPI(searchStr);
         } catch (HTTPClientException e) {
-            // TODO, wrap HTTPClientWITHGeneral exception and rethrow,
+            // TODO: wrap HTTPClientWITHGeneral exception and rethrow,
             // JSONPaser and HTTPClient is too fine grind.
             Log.d("Daisy", "HTTPClientException catched with error " +
                     "" + e);
@@ -70,19 +70,19 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
     }
 
     @Override
-    public void deliverResult(List<CatEntry> data) {
+    public void deliverResult(List<ImageEntry> data) {
 //        if (dialog.isShowing()) {
 //            dialog.dismiss();
 //        }
         super.deliverResult(data);
     }
 
-    public CatEntryLoader(Context context) {
+    public ImageEntryLoader(Context context) {
         super(context);
         this.context = context;
     }
 
-    private List<CatEntry> getResultFromMicrosoftAzureAPI(final String
+    private List<ImageEntry> getResultFromMicrosoftAzureAPI(final String
                                                                   strSearch)
             throws HTTPClientException, JSONParserException {
         ImageSearchHTTPClient.Builder imageSearchClientBuilder = new
@@ -95,10 +95,10 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
         AzureJSONParserImpl.Result result = (AzureJSONParserImpl
                 .Result) azureJSONParser.extractResult
                 (imageSearchClientResponseJSON);
-        return result.getCatEntryList();
+        return result.getImageEntryList();
     }
 
-    private List<CatEntry> getResultFromGoogleSearchAPI(final String strSearch) throws NetworkExceptions {
+    private List<ImageEntry> getResultFromGoogleSearchAPI(final String strSearch) throws NetworkExceptions {
         URL url;
         JSONObject json = null;
         BufferedReader reader = null;
@@ -143,7 +143,7 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
             Log.d("DYDEBUG", "Result array length => " + resultArray.length());
             Log.d("DYDEBUG", "Google image search API call result: " +
                     "" + resultArray.toString());
-            List<CatEntry> resultList = getImageList(resultArray);
+            List<ImageEntry> resultList = getImageList(resultArray);
             return resultList;
         } catch (JSONException e) {
             Log.e("DYDEBUG", "JSON passing exception");
@@ -155,15 +155,15 @@ public class CatEntryLoader extends AsyncTaskLoader<List<CatEntry>> {
 
     }
 
-    private List<CatEntry> getImageList(JSONArray resultArray) {
-        List<CatEntry> listImages = new ArrayList<>();
-        CatEntry bean;
+    private List<ImageEntry> getImageList(JSONArray resultArray) {
+        List<ImageEntry> listImages = new ArrayList<>();
+        ImageEntry bean;
 
         try {
             for (int i = 0; i < resultArray.length(); i++) {
                 JSONObject obj;
                 obj = resultArray.getJSONObject(i);
-                bean = new CatEntry();
+                bean = new ImageEntry();
 
                 bean.setTitle(obj.getString("title"));
                 bean.setIcon(obj.getString("tbUrl"));
