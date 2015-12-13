@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 import com.example.daisy.dailyapple.R;
 import com.example.daisy.dailyapple.database.MySQLiteHelper;
+import com.example.daisy.dailyapple.learn.LearningActivity;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.HashMap;
@@ -81,8 +82,8 @@ public class WordsListHolder {
     }
 
     public Map<String, WordsEntry> getList(final ListName listName, final
-    boolean isReview) {
-        if (isReview) {
+    LearningActivity.LearningStatus learningStatus) {
+        if (learningStatus != LearningActivity.LearningStatus.LEARNING) {
             return getReviewList(listName);
         } else {
             return getLearningList(listName);

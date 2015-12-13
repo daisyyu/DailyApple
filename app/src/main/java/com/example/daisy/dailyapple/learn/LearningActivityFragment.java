@@ -43,11 +43,12 @@ public class LearningActivityFragment extends Fragment implements
     private WordsListHolder.ListName listName;
 
     private WordsListHolder wordsListHolder;
-    private boolean isReview;
+    private LearningActivity.LearningStatus learningStatus;
     static public String SEARCH_QUERY_KEY = "searchQuery";
 
     static public String LISTNAME_KEY = "listName";
-    static public String IS_REVIEW_KEY = "isReview";
+    static public String LEARNING_STATUS_KEY = "learningStatus";
+
     public LearningActivityFragment() {
     }
 
@@ -70,20 +71,20 @@ public class LearningActivityFragment extends Fragment implements
         Bundle args = getArguments();
         searchQuery = args.getString(SEARCH_QUERY_KEY);
         listName = (WordsListHolder.ListName) args.get(LISTNAME_KEY);
-        isReview = args.getBoolean(IS_REVIEW_KEY);
+        learningStatus = (LearningActivity.LearningStatus) args.get(LEARNING_STATUS_KEY);
         wordsListHolder = new WordsListHolder(getActivity());
-        wordsEntry = wordsListHolder.getList(listName, isReview).get(searchQuery);
-        if (!isReview && !wordsEntry.isLearned()) {
+        wordsEntry = wordsListHolder.getList(listName, learningStatus).get(searchQuery);
+        if (learningStatus == LearningActivity.LearningStatus.LEARNING && !wordsEntry.isLearned()) {
             bottomFragment = LearningWithoutTranslationFragment.newInstance
                     (searchQuery, listName);
         } else {
             bottomFragment = LearnedWithoutTranslationFragment.newInstance
-                    (searchQuery, listName);
+                    (searchQuery, listName, learningStatus);
         }
         fragmentManager.beginTransaction().add(R.id
                         .buttomFragmentPlaceHolder,
                 bottomFragment).commit();
-        translationFragment = TranslationFragment.newInstance(searchQuery, wordsEntry.getPhoneticMP3Address(), wordsEntry.getTranslation());
+        translationFragment = TranslationFragment.newInstance(searchQuery, wordsEntry.getPhoneticMP3Address(), wordsEntry.getTranslation(), learningStatus);
         fragmentManager.beginTransaction().add(R.id
                 .translationFragmentLearnPlaceHolder, translationFragment)
                 .commit();
@@ -132,7 +133,7 @@ public class LearningActivityFragment extends Fragment implements
         wordsEntry.setPhoneticMP3Address(mp3Address);
         wordsEntry.setTranslation(translation);
         bottomFragment = LearnedWithoutTranslationFragment.newInstance
-                (searchQuery, listName);
+                (searchQuery, listName,learningStatus);
         fragmentManager.beginTransaction().replace(R.id
                 .buttomFragmentPlaceHolder, bottomFragment).commit();
         // TODO: make this an intent service

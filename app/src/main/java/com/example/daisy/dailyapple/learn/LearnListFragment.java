@@ -37,14 +37,14 @@ public class LearnListFragment extends ListFragment {
     LoaderManager.LoaderCallbacks<Map<String, WordsEntry>> callback;
     LearnListItemAdapter adapter;
     ListView listView;
-    boolean isReview;
+    LearningActivity.LearningStatus learningStatus;
     Map<String, WordsEntry> wordsEntryMap = null;
     String[] keyArray = null;
     private WordsListHolder.ListName listName;
 
     public static String EXTRA_WORDS_LIST = "extra_words_list";
     public static String EXTRA_CLICK_POSITION = "extra_click_position";
-    public static String EXTRA_LIST_IS_REVIEW = "extraListIsReview";
+    public static String EXTRA_LIST_LEARNING_STATUS = "extraLearningStatus";
     public static String EXTRA_LIST_NAME = "extra_list_name";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -54,11 +54,11 @@ public class LearnListFragment extends ListFragment {
     }
 
     public static LearnListFragment newInstance(final WordsListHolder
-            .ListName listName, final boolean isReview) {
+            .ListName listName, final LearningActivity.LearningStatus learningStatus) {
         LearnListFragment fragment = new LearnListFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, listName);
-        args.putBoolean(ARG_PARAM2, isReview);
+        args.putSerializable(ARG_PARAM2, learningStatus);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,7 +70,7 @@ public class LearnListFragment extends ListFragment {
         if (getArguments() != null) {
             listName = (WordsListHolder.ListName) getArguments().get
                     (ARG_PARAM1);
-            isReview = (boolean) getArguments().get(ARG_PARAM2);
+            learningStatus = (LearningActivity.LearningStatus) getArguments().get(ARG_PARAM2);
         }
     }
 
@@ -91,7 +91,7 @@ public class LearnListFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         listView = getListView();
 //      specify what layout each row has
-        adapter = new LearnListItemAdapter(getActivity(), R.layout.learn_listview_item_row, isReview);
+        adapter = new LearnListItemAdapter(getActivity(), R.layout.learn_listview_item_row, learningStatus);
         setListAdapter(adapter);
         initLoaderCallBack();
     }
@@ -115,7 +115,7 @@ public class LearnListFragment extends ListFragment {
         intent.putExtra(EXTRA_WORDS_LIST, keyArray);
         intent.putExtra(EXTRA_CLICK_POSITION, position);
         intent.putExtra(EXTRA_LIST_NAME, listName);
-        intent.putExtra(EXTRA_LIST_IS_REVIEW, isReview);
+        intent.putExtra(EXTRA_LIST_LEARNING_STATUS, learningStatus);
         startActivity(intent);
     }
 
@@ -142,7 +142,7 @@ public class LearnListFragment extends ListFragment {
             public Loader<Map<String, WordsEntry>> onCreateLoader(int id,
                                                                   Bundle args) {
                 Log.d("Daisy", "LearnListFragment onCreateLoader");
-                return new LearnItemEntryLoader(getActivity(), listName, isReview);
+                return new LearnItemEntryLoader(getActivity(), listName, learningStatus);
             }
 
             @Override

@@ -22,6 +22,7 @@ import com.example.daisy.dailyapple.DAO.WordsEntry;
 import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
 import com.example.daisy.dailyapple.database.MySQLiteHelper;
+import com.example.daisy.dailyapple.learn.LearningActivity;
 import com.example.daisy.dailyapple.learn.LearningActivityFragment;
 import com.example.daisy.dailyapple.translation.loaders.*;
 
@@ -48,6 +49,7 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
+    private static final String ARG_PARAM4 = "param4";
     MediaPlayer mediaPlayer;
     private Button mp3PlayButton;
     private boolean isFragmentReady = false;
@@ -56,16 +58,21 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
     private String translationBundle;
     private String mp3Address = null;
 
+    private View translationLinearLayout;
+    private Button showTranslationButton;
+    private LearningActivity.LearningStatus learningStatus;
+
     public TranslationFragment() {
         // Required empty public constructor
     }
 
-    public static TranslationFragment newInstance(final String searchTarget, final String mp3, final String translation) {
+    public static TranslationFragment newInstance(final String searchTarget, final String mp3, final String translation, final LearningActivity.LearningStatus learningStatus) {
         TranslationFragment fragment = new TranslationFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ARG_PARAM1, searchTarget);
         bundle.putString(ARG_PARAM2, mp3);
         bundle.putString(ARG_PARAM3, translation);
+        bundle.putSerializable(ARG_PARAM4, learningStatus);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -78,6 +85,7 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
             searchTarget = getArguments().getString(ARG_PARAM1);
             mp3Address = getArguments().getString(ARG_PARAM2);
             translationBundle = getArguments().getString(ARG_PARAM3);
+            learningStatus = (LearningActivity.LearningStatus) getArguments().get(ARG_PARAM4);
         }
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -104,9 +112,23 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        Log.d("Daisy", "TranslationFragment onCreateView");
-        return inflater.inflate(R.layout.fragment_translation, container, false);
+        View root = inflater.inflate(R.layout.fragment_translation, container, false);
+        this.translationLinearLayout = root.findViewById(R.id.translationLinearLayout);
+        this.showTranslationButton = (Button) root.findViewById(R.id.showTranslationButton);
+        if (learningStatus == LearningActivity.LearningStatus.TEST) {
+            showTranslationButton.setVisibility(View.VISIBLE);
+            translationLinearLayout.setVisibility(View.INVISIBLE);
+            showTranslationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    translationLinearLayout.setVisibility(View.VISIBLE);
+                }
+            });
+        } else {
+            showTranslationButton.setVisibility(View.INVISIBLE);
+            translationLinearLayout.setVisibility(View.VISIBLE);
+        }
+        return root;
     }
 
     @Override

@@ -29,6 +29,7 @@ import android.widget.*;
 import com.example.daisy.dailyapple.DAO.WordsListHolder;
 import com.example.daisy.dailyapple.R;
 import com.example.daisy.dailyapple.learn.LearnListActivity;
+import com.example.daisy.dailyapple.learn.LearningActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -293,8 +294,7 @@ public class NavigationDrawerFragment extends Fragment implements
                 break;
             case LEARNING:
                 intent = new Intent(getActivity(), LearnListActivity.class);
-                intent.putExtra(LearnListActivity.IS_REVIEW_BOOLEAN_EXTRA,
-                        false);
+                intent.putExtra(LearnListActivity.LEARNING_STATUS_EXTRA, LearningActivity.LearningStatus.LEARNING);
                 intent.putExtra(LearnListActivity.LIST_NAME_EXTRA,
                         childItem.listName);
                 intent.putExtra(CHILD_POSITION_EXTRA, childPosition);
@@ -303,8 +303,7 @@ public class NavigationDrawerFragment extends Fragment implements
                 break;
             case REVIEW:
                 intent = new Intent(getActivity(), LearnListActivity.class);
-                intent.putExtra(LearnListActivity.IS_REVIEW_BOOLEAN_EXTRA,
-                        true);
+                intent.putExtra(LearnListActivity.LEARNING_STATUS_EXTRA, LearningActivity.LearningStatus.REVIEW);
                 intent.putExtra(LearnListActivity.LIST_NAME_EXTRA,
                         childItem.listName);
                 intent.putExtra(CHILD_POSITION_EXTRA, childPosition);
@@ -312,6 +311,13 @@ public class NavigationDrawerFragment extends Fragment implements
                 startActivity(intent);
                 break;
             case TEST:
+                intent = new Intent(getActivity(), LearnListActivity.class);
+                intent.putExtra(LearnListActivity.LEARNING_STATUS_EXTRA, LearningActivity.LearningStatus.TEST);
+                intent.putExtra(LearnListActivity.LIST_NAME_EXTRA,
+                        childItem.listName);
+                intent.putExtra(CHILD_POSITION_EXTRA, childPosition);
+                intent.putExtra(PARENT_POSITION_EXTRA, groupPosition);
+                startActivity(intent);
                 break;
             case SETTING:
                 break;

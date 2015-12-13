@@ -15,13 +15,13 @@ public class LearnItemEntryLoader extends AsyncTaskLoader<Map<String, WordsEntry
     //    private ProgressDialog dialog;
     private Context context;
     private WordsListHolder.ListName listName;
-    private boolean isReview;
+    private LearningActivity.LearningStatus learningStatus;
 
 
     public LearnItemEntryLoader(Context context, final WordsListHolder.ListName
-            listName, final boolean isReview) {
+            listName, final LearningActivity.LearningStatus learningStatus) {
         super(context);
-        this.isReview = isReview;
+        this.learningStatus = learningStatus;
         this.context = context;
         this.listName = listName;
     }
@@ -44,7 +44,7 @@ public class LearnItemEntryLoader extends AsyncTaskLoader<Map<String, WordsEntry
     private Map<String, WordsEntry> getWordsEntryMap(final Context context) {
         Map<String, WordsEntry> map;
         WordsListHolder listHolder = new WordsListHolder(context);
-        map = listHolder.getList(listName,isReview);
+        map = listHolder.getList(listName,learningStatus);
         return map;
     }
 

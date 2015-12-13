@@ -17,26 +17,38 @@ import com.example.daisy.dailyapple.welcome.NavigationDrawerFragment;
 public class LearnListActivity extends NavigationDrawerActivity {
 
     private WordsListHolder.ListName listName;
-    private boolean isReview;
-    Fragment learnListFragment;
+    private Fragment learnListFragment;
+    private LearningActivity.LearningStatus learningStatus;
     public static final String LIST_NAME_EXTRA = "listNameExtra";
-    public static final String IS_REVIEW_BOOLEAN_EXTRA = "isReviewBoolean";
+    public static final String LEARNING_STATUS_EXTRA = "learningStatusExtra";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
         listName = (WordsListHolder.ListName) intent.getSerializableExtra
                 (LIST_NAME_EXTRA);
-        isReview = intent.getBooleanExtra(IS_REVIEW_BOOLEAN_EXTRA, false);
+        learningStatus = (LearningActivity.LearningStatus) intent.getSerializableExtra(LEARNING_STATUS_EXTRA);
 
         super.onCreate(savedInstanceState);
-        learnListFragment = LearnListFragment.newInstance(listName, isReview);
+        learnListFragment = LearnListFragment.newInstance(listName, learningStatus);
         fragmentManager.beginTransaction().add(R.id
                 .container, learnListFragment).commit();
     }
 
     protected void showActivityContextActionBar() {
-        String prefix = isReview ? "Review " : "Learning ";
+        String prefix = "";
+        switch (learningStatus) {
+
+            case LEARNING:
+                prefix = "Learning ";
+                break;
+            case REVIEW:
+                prefix = "Review ";
+                break;
+            case TEST:
+                prefix = "Testing ";
+                break;
+        }
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(prefix + listName.getListName());
     }

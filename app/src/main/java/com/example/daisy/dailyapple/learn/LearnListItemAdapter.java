@@ -26,13 +26,13 @@ public class LearnListItemAdapter extends ArrayAdapter<String> {
     int layoutResourceId;
     Map<String, WordsEntry> data = null;
     String[] keyArray;
-    boolean isReview;
+    LearningActivity.LearningStatus learningStatus;
 
-    public LearnListItemAdapter(Context context, int layoutResourceId, final boolean isReview) {
+    public LearnListItemAdapter(Context context, int layoutResourceId, final LearningActivity.LearningStatus learningStatus) {
         super(context, layoutResourceId);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
-        this.isReview = isReview;
+        this.learningStatus = learningStatus;
     }
 
     public void setData(Map<String, WordsEntry> wordsEntries, String[]
@@ -67,25 +67,52 @@ public class LearnListItemAdapter extends ArrayAdapter<String> {
         }
         WordsEntry entry = data.get(keyArray[position]);
         holder.wordsTextView.setText(keyArray[position]);
-        String wordsTextDisplayableText;
-        if (isReview) {
-//            wordsTextDisplayableText = "Review it!";
-            wordsTextDisplayableText = entry.getTranslation();
-            row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
-            holder.isLearnedTextView.setGravity(Gravity.START);
-        } else {
-            if (entry.isLearned()) {
+        String wordsTextDisplayableText = "";
+        switch (learningStatus) {
+
+            case LEARNING:
+                if (entry.isLearned()) {
 //                wordsTextDisplayableText = "You already leanred it";
+                    wordsTextDisplayableText = entry.getTranslation();
+                    row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
+                    holder.isLearnedTextView.setGravity(Gravity.START);
+                } else {
+                    // Not learned
+                    wordsTextDisplayableText = "Lean it now";
+                    row.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+                    holder.isLearnedTextView.setGravity(Gravity.END);
+                }
+                break;
+            case REVIEW:
                 wordsTextDisplayableText = entry.getTranslation();
                 row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
                 holder.isLearnedTextView.setGravity(Gravity.START);
-            } else {
-                // Not learned
-                wordsTextDisplayableText = "Lean it now";
-                row.setBackgroundColor(context.getResources().getColor(android.R.color.white));
-                holder.isLearnedTextView.setGravity(Gravity.END);
-            }
+                break;
+            case TEST:
+                row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
+                holder.isLearnedTextView.setGravity(Gravity.START);
+                break;
         }
+
+
+//        if (isReview) {
+////            wordsTextDisplayableText = "Review it!";
+//            wordsTextDisplayableText = entry.getTranslation();
+//            row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
+//            holder.isLearnedTextView.setGravity(Gravity.START);
+//        } else {
+//            if (entry.isLearned()) {
+////                wordsTextDisplayableText = "You already leanred it";
+//                wordsTextDisplayableText = entry.getTranslation();
+//                row.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
+//                holder.isLearnedTextView.setGravity(Gravity.START);
+//            } else {
+//                // Not learned
+//                wordsTextDisplayableText = "Lean it now";
+//                row.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+//                holder.isLearnedTextView.setGravity(Gravity.END);
+//            }
+//        }
         holder.isLearnedTextView.setText(wordsTextDisplayableText);
         return row;
     }

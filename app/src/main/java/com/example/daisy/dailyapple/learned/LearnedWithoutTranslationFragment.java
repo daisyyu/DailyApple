@@ -8,13 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.daisy.dailyapple.R;
 import com.example.daisy.dailyapple.DAO.WordsEntry;
 import com.example.daisy.dailyapple.DAO.WordsListHolder;
+import com.example.daisy.dailyapple.learn.LearningActivity;
 import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 import imageHint.ImageLoader;
+
+import java.util.zip.Adler32;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +30,7 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
     private ImageLoader imageLoader;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
 
     private WordsListHolder.ListName listName;
 
@@ -39,16 +44,20 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
 
     private String queryString;
     private ImageView imageHint;
+    private View imageHintLinearLayout;
+    private Button showHintButton;
+    private LearningActivity.LearningStatus learningStatus;
 
     public LearnedWithoutTranslationFragment() {
     }
 
     public static LearnedWithoutTranslationFragment newInstance(final String
-                                                                        queryString, final WordsListHolder.ListName listName) {
+                                                                        queryString, final WordsListHolder.ListName listName, final LearningActivity.LearningStatus learningStatus) {
         LearnedWithoutTranslationFragment fragment = new LearnedWithoutTranslationFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ARG_PARAM1, queryString);
         bundle.putSerializable(ARG_PARAM2, listName);
+        bundle.putSerializable(ARG_PARAM3, learningStatus);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -60,6 +69,7 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
             queryString = getArguments().getString(ARG_PARAM1);
             listName = (WordsListHolder.ListName) getArguments()
                     .get(ARG_PARAM2);
+            learningStatus = (LearningActivity.LearningStatus) getArguments().get(ARG_PARAM3);
         }
         imageLoader = new ImageLoader(getActivity());
     }
@@ -71,6 +81,21 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
         Log.d("Daisy", "LearnedWithoutTranslationFragment onCreateView");
         View rootView = inflater.inflate(R.layout
                 .fragment_learned_without_translation, container, false);
+        this.imageHintLinearLayout = rootView.findViewById(R.id.imageHintLinearLayout);
+        this.showHintButton = (Button) rootView.findViewById(R.id.showHintButton);
+        if (learningStatus == LearningActivity.LearningStatus.TEST) {
+            imageHintLinearLayout.setVisibility(View.INVISIBLE);
+            showHintButton.setVisibility(View.VISIBLE);
+            showHintButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageHintLinearLayout.setVisibility(View.VISIBLE);
+                }
+            });
+        } else {
+            showHintButton.setVisibility(View.INVISIBLE);
+            imageHintLinearLayout.setVisibility(View.VISIBLE);
+        }
         personalHint = (TextView) rootView.findViewById(R.id.personalHint);
         imageHint = (ImageView) rootView.findViewById(R.id.imgIcon);
         return rootView;
@@ -98,7 +123,7 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
                     "null,not updating view");
             return;
         }
-        wordsEntry = new WordsListHolder(getActivity()).getList(listName, false)
+        wordsEntry = new WordsListHolder(getActivity()).getList(listName, learningStatus)
                 .get
                         (queryString);
         personalHint.setText(wordsEntry.getPersonalHint());
