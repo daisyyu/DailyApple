@@ -37,16 +37,21 @@ public class WordsDAO {
      * @param wordsEntry
      */
     public void addWordsEntry(WordsEntry wordsEntry) {
-        openForWrite();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MySQLiteHelper.Column.COLUMN_WORD.getVal(), wordsEntry.getWord());
-        contentValues.put(MySQLiteHelper.Column.COLUMN_IMAGE_HINT.getVal(), wordsEntry.getIconHint());
-        int isLeanred = wordsEntry.isLearned() ? 1 : 0;
-        contentValues.put(MySQLiteHelper.Column.COLUMN_IS_LEARNED.getVal(), isLeanred);
-        contentValues.put(MySQLiteHelper.Column.COLUMN_PERSONAL_HINT.getVal(), wordsEntry.getPersonalHint());
-        contentValues.put(MySQLiteHelper.Column.COLUMN_MP3.getVal(), wordsEntry.getPhoneticMP3Address());
-        contentValues.put(MySQLiteHelper.Column.COLUMN_TRANSLATION.getVal(), wordsEntry.getTranslation());
-        database.insert(listName.name(), null, contentValues);
+        try {
+            openForWrite();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MySQLiteHelper.Column.COLUMN_WORD.getVal(), wordsEntry.getWord());
+            contentValues.put(MySQLiteHelper.Column.COLUMN_IMAGE_HINT.getVal(), wordsEntry.getIconHint());
+            int isLeanred = wordsEntry.isLearned() ? 1 : 0;
+            contentValues.put(MySQLiteHelper.Column.COLUMN_IS_LEARNED.getVal(), isLeanred);
+            contentValues.put(MySQLiteHelper.Column.COLUMN_PERSONAL_HINT.getVal(), wordsEntry.getPersonalHint());
+            contentValues.put(MySQLiteHelper.Column.COLUMN_MP3.getVal(), wordsEntry.getPhoneticMP3Address());
+            contentValues.put(MySQLiteHelper.Column.COLUMN_TRANSLATION.getVal(), wordsEntry.getTranslation());
+            database.insert(listName.name(), null, contentValues);
+        }
+        finally {
+            dbHelper.close();
+        }
     }
 
     public void getWordsEntry(String word) {

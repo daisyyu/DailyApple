@@ -20,6 +20,9 @@ import com.example.daisy.dailyapple.learned.LearnedWithoutTranslationFragment;
 import com.example.daisy.dailyapple.translation.SearchQueryChangeListener;
 import com.example.daisy.dailyapple.translation.TranslationFragment;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -125,15 +128,21 @@ public class LearningActivityFragment extends Fragment implements
     @Override
     public void onChildGotIt(final String personalHint, final String
             imageIcon) {
+        Map<String, WordsEntry> reviewListMemHolder = wordsListHolder.getList(listName, LearningActivity.LearningStatus.REVIEW);
+
+
         wordsEntry.setIconHint(imageIcon);
         wordsEntry.setPersonalHint(personalHint);
         wordsEntry.setIsLearned(true);
+
         final String mp3Address = ((TranslationFragment) translationFragment).getMp3Address();
         final String translation = ((TranslationFragment) translationFragment).getTranslationBundle();
         wordsEntry.setPhoneticMP3Address(mp3Address);
         wordsEntry.setTranslation(translation);
+
+        reviewListMemHolder.put(searchQuery,wordsEntry);
         bottomFragment = LearnedWithoutTranslationFragment.newInstance
-                (searchQuery, listName,learningStatus);
+                (searchQuery, listName, learningStatus);
         fragmentManager.beginTransaction().replace(R.id
                 .buttomFragmentPlaceHolder, bottomFragment).commit();
         // TODO: make this an intent service

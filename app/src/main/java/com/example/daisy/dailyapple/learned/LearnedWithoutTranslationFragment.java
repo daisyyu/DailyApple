@@ -3,6 +3,7 @@ package com.example.daisy.dailyapple.learned;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,19 +84,6 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
                 .fragment_learned_without_translation, container, false);
         this.imageHintLinearLayout = rootView.findViewById(R.id.imageHintLinearLayout);
         this.showHintButton = (Button) rootView.findViewById(R.id.showHintButton);
-        if (learningStatus == LearningActivity.LearningStatus.TEST) {
-            imageHintLinearLayout.setVisibility(View.INVISIBLE);
-            showHintButton.setVisibility(View.VISIBLE);
-            showHintButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageHintLinearLayout.setVisibility(View.VISIBLE);
-                }
-            });
-        } else {
-            showHintButton.setVisibility(View.INVISIBLE);
-            imageHintLinearLayout.setVisibility(View.VISIBLE);
-        }
         personalHint = (TextView) rootView.findViewById(R.id.personalHint);
         imageHint = (ImageView) rootView.findViewById(R.id.imgIcon);
         return rootView;
@@ -126,7 +114,34 @@ public class LearnedWithoutTranslationFragment extends Fragment implements Searc
         wordsEntry = new WordsListHolder(getActivity()).getList(listName, learningStatus)
                 .get
                         (queryString);
-        personalHint.setText(wordsEntry.getPersonalHint());
-        imageLoader.DisplayImage(wordsEntry.getIconHint(), imageHint);
+        if (TextUtils.isEmpty(wordsEntry.getIconHint()) && TextUtils.isEmpty(wordsEntry.getPersonalHint())) {
+            imageHintLinearLayout.setVisibility(View.INVISIBLE);
+            showHintButton.setVisibility(View.INVISIBLE);
+            return;
+        }
+        if (learningStatus == LearningActivity.LearningStatus.TEST) {
+            imageHintLinearLayout.setVisibility(View.INVISIBLE);
+            showHintButton.setVisibility(View.VISIBLE);
+            showHintButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageHintLinearLayout.setVisibility(View.VISIBLE);
+                    showHintButton.setVisibility(View.INVISIBLE);
+                }
+            });
+        } else {
+            showHintButton.setVisibility(View.INVISIBLE);
+            imageHintLinearLayout.setVisibility(View.VISIBLE);
+        }
+        if (TextUtils.isEmpty(wordsEntry.getPersonalHint())) {
+            personalHint.setVisibility(View.INVISIBLE);
+        } else {
+            personalHint.setText(wordsEntry.getPersonalHint());
+        }
+        if (TextUtils.isEmpty(wordsEntry.getIconHint())) {
+            imageHint.setVisibility(View.INVISIBLE);
+        } else {
+            imageLoader.DisplayImage(wordsEntry.getIconHint(), imageHint);
+        }
     }
 }
