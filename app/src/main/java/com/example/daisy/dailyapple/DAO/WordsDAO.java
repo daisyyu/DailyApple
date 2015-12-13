@@ -56,77 +56,95 @@ public class WordsDAO {
 
     public void updateWordsWithColumn(String words, MySQLiteHelper.Column columnName, Object value) {
         Log.d("Daisy", "executing updateWordsWithColumn");
-        openForWrite();
-        ContentValues contentValues = new ContentValues();
-        switch (columnName) {
-            case COLUMN_IS_LEARNED:
-                contentValues.put(columnName.getVal(), (int) value);
-                break;
-            case COLUMN_PERSONAL_HINT:
-                contentValues.put(columnName.getVal(), (String) value);
-                break;
-            case COLUMN_IMAGE_HINT:
-                contentValues.put(columnName.getVal(), (String) value);
-                break;
-            case COLUMN_WORD:
-                contentValues.put(columnName.getVal(), (String) value);
-                break;
-            case COLUMN_MP3:
-                contentValues.put(columnName.getVal(), (String) value);
-                break;
-            case COLUMN_TRANSLATION:
-                contentValues.put(columnName.getVal(), (String) value);
-                break;
+        try {
+            openForWrite();
+            ContentValues contentValues = new ContentValues();
+            switch (columnName) {
+                case COLUMN_IS_LEARNED:
+                    contentValues.put(columnName.getVal(), (int) value);
+                    break;
+                case COLUMN_PERSONAL_HINT:
+                    contentValues.put(columnName.getVal(), (String) value);
+                    break;
+                case COLUMN_IMAGE_HINT:
+                    contentValues.put(columnName.getVal(), (String) value);
+                    break;
+                case COLUMN_WORD:
+                    contentValues.put(columnName.getVal(), (String) value);
+                    break;
+                case COLUMN_MP3:
+                    contentValues.put(columnName.getVal(), (String) value);
+                    break;
+                case COLUMN_TRANSLATION:
+                    contentValues.put(columnName.getVal(), (String) value);
+                    break;
+            }
+            database.update(listName.name(), contentValues, "word=?", new String[]{words});
+        } finally {
+            dbHelper.close();
         }
-        database.update(listName.name(), contentValues, "word=?", new String[]{words});
     }
 
     public void getALLWordsEntryAndUpdateConcurrentMap(Map<String, WordsEntry> map) {
         String selectQuery = "SELECT  * FROM " + listName.name();
-        openForRead();
-        Cursor cursor = database.rawQuery(selectQuery, null);
+        Cursor cursor = null;
+        try {
+            openForRead();
+            cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    String word = cursor.getString(0);
+                    WordsEntry wordsEntry = map.get(word);
+                    if (wordsEntry == null) {
+                        Log.d("Daisy", "WordsDAO " +
+                                "getALLWordsEntryAndUpdateConcurrentMap words " + word + " doesn't exist in " +
+                                "wordsList");
+                        continue;
+                    }
+                    //TODO: should retrieve column number via CONST
+                    String imageHint = cursor.getString(2);
+                    String personalHint = cursor.getString(1);
+                    String mp3 = cursor.getString(4);
+                    String translation = cursor.getString(5);
+                    wordsEntry.setIconHint(imageHint);
+                    wordsEntry.setPersonalHint(personalHint);
+                    wordsEntry.setIsLearned(true);
+                    wordsEntry.setPhoneticMP3Address(mp3);
+                    wordsEntry.setTranslation(translation);
 
-        if (cursor.moveToFirst()) {
-            do {
-                String word = cursor.getString(0);
-                WordsEntry wordsEntry = map.get(word);
-                if (wordsEntry == null) {
-                    Log.d("Daisy", "WordsDAO " +
-                            "getALLWordsEntryAndUpdateConcurrentMap words " + word + " doesn't exist in " +
-                            "wordsList");
-                    continue;
-                }
-                //TODO: should retrieve column number via CONST
-                String imageHint = cursor.getString(2);
-                String personalHint = cursor.getString(1);
-                String mp3 = cursor.getString(4);
-                String translation = cursor.getString(5);
-                wordsEntry.setIconHint(imageHint);
-                wordsEntry.setPersonalHint(personalHint);
-                wordsEntry.setIsLearned(true);
-                wordsEntry.setPhoneticMP3Address(mp3);
-                wordsEntry.setTranslation(translation);
-
-            } while (cursor.moveToNext());
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null && !cursor.isClosed())
+                cursor.close();
+            dbHelper.close();
         }
     }
 
     public Map<String, WordsEntry> getAllWordsEntryForReviewActionAndReturnMap() {
         String selectQuery = "SELECT  * FROM " + listName.name();
-        openForRead();
-        Cursor cursor = database.rawQuery(selectQuery, null);
+        Cursor cursor = null;
         Map<String, WordsEntry> map = new HashMap<>();
-        if (cursor.moveToFirst()) {
-            do {
-                String word = cursor.getString(0);
-                String imageHint = cursor.getString(2);
-                String personalHint = cursor.getString(1);
-                String mp3 = cursor.getString(4);
-                String translation = cursor.getString(5);
-                WordsEntry wordsEntry = new WordsEntry(imageHint,
-                        personalHint, true, word, mp3, translation);
-                map.put(word, wordsEntry);
-            } while (cursor.moveToNext());
+        try {
+            openForRead();
+            cursor = database.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    String word = cursor.getString(0);
+                    String imageHint = cursor.getString(2);
+                    String personalHint = cursor.getString(1);
+                    String mp3 = cursor.getString(4);
+                    String translation = cursor.getString(5);
+                    WordsEntry wordsEntry = new WordsEntry(imageHint,
+                            personalHint, true, word, mp3, translation);
+                    map.put(word, wordsEntry);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null && !cursor.isClosed())
+                cursor.close();
+            dbHelper.close();
         }
         return map;
     }

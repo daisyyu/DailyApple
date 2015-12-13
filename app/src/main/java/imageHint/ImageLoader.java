@@ -193,9 +193,9 @@ public class ImageLoader {
                             .setIcon(newUrl);
                     bmp = getBitmap(newUrl);
                 }
-                memoryCache.put(photoToLoad.url, bmp);
-                if (imageViewReused(photoToLoad))
-                    return;
+//                memoryCache.put(photoToLoad.url, bmp);
+//                if (imageViewReused(photoToLoad))
+//                    return;
                 BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
                 Log.d("Daisy", "BitmapDisplayer posted" + System.identityHashCode(bd));
                 hashcodeList.add(photoToLoad.url);
