@@ -122,6 +122,7 @@ public class TranslationFragment extends Fragment implements SearchQueryChangeLi
                 @Override
                 public void onClick(View v) {
                     translationLinearLayout.setVisibility(View.VISIBLE);
+                    showTranslationButton.setVisibility(View.INVISIBLE);
                 }
             });
         } else {
